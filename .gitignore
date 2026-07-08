@@ -27,6 +27,7 @@ Thumbs.db
 
 .vercel
 .wrangler/
+wrangler.autodeploy.jsonc
 _gitdb/
 .tmp/
 

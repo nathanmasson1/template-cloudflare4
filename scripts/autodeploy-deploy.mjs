@@ -56,4 +56,4 @@ await run("npx", [
   "wrangler.autodeploy.jsonc",
 ]);
 await run("node", ["scripts/prepare-cloudflare-assets.mjs"]);
-await run("npx", ["wrangler", "deploy", "--config", "wrangler.autodeploy.jsonc"]);
+await run("npx", ["wrangler", "deploy"]);

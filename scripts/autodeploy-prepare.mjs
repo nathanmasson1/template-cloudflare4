@@ -4,6 +4,7 @@ import path from "node:path";
 const root = process.cwd();
 const sourcePath = path.join(root, "wrangler.jsonc");
 const targetPath = path.join(root, "wrangler.autodeploy.jsonc");
+const deployConfigPath = path.join(root, ".wrangler", "deploy", "config.json");
 
 function stripJsonc(text) {
   let output = "";
@@ -107,4 +108,11 @@ if (customDomain) {
 }
 
 fs.writeFileSync(targetPath, `${JSON.stringify(config, null, 2)}\n`, "utf8");
+fs.mkdirSync(path.dirname(deployConfigPath), { recursive: true });
+fs.writeFileSync(
+  deployConfigPath,
+  `${JSON.stringify({ configPath: "../../wrangler.autodeploy.jsonc" }, null, 2)}\n`,
+  "utf8",
+);
 console.log(`Generated ${path.relative(root, targetPath)} for ${workerName}`);
+console.log(`Generated ${path.relative(root, deployConfigPath)} for Wrangler config redirect`);
