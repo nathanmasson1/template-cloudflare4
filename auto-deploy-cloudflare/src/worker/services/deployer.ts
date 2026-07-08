@@ -249,7 +249,8 @@ export async function refreshJob(env: Env, jobId: string): Promise<JobRecord | n
   try {
     const { cf } = await getCloudflareClient(env);
     const build = await cf.getBuild(site.buildTriggerId, site.buildId);
-    const status = String(build?.status || build?.outcome || "").toLowerCase();
+    const status = String(build?.status || "").toLowerCase();
+    const outcome = String(build?.outcome || build?.build_outcome || "").toLowerCase();
     const logs = await cf.getBuildLogs(site.buildTriggerId, site.buildId).catch(() => "");
     if (logs) {
       await env.APP_BUCKET.put(`jobs/${job.id}/cloudflare-build.log`, logs, {
@@ -257,15 +258,15 @@ export async function refreshJob(env: Env, jobId: string): Promise<JobRecord | n
       });
     }
 
-    if (["success", "succeeded", "complete", "completed"].includes(status)) {
+    if (["success", "succeeded", "complete", "completed"].includes(status) || ["success", "succeeded"].includes(outcome)) {
       site.status = site.customDomain && Object.keys(site.zone || {}).length === 0 ? "domain_pending" : "online";
       site.updatedAt = nowIso();
       await saveSite(env, site);
       const { logs: _logs, ...jobWithoutLogs } = job;
       await saveJob(env, { ...jobWithoutLogs, status: "done", currentStep: "Build concluido", updatedAt: nowIso(), result: { site, build } });
-    } else if (["failed", "failure", "errored", "canceled", "cancelled"].includes(status)) {
+    } else if (["failed", "failure", "errored", "canceled", "cancelled", "stopped"].includes(status) || ["fail", "failed", "failure"].includes(outcome)) {
       site.status = "failed";
-      site.error = `Build ${status}`;
+      site.error = buildFailureMessage(status, outcome, logs);
       site.updatedAt = nowIso();
       await saveSite(env, site);
       const { logs: _logs, ...jobWithoutLogs } = job;
@@ -276,6 +277,13 @@ export async function refreshJob(env: Env, jobId: string): Promise<JobRecord | n
   }
 
   return getJob(env, jobId);
+}
+
+function buildFailureMessage(status: string, outcome: string, logs: string): string {
+  if (/build token selected.*deleted or rolled/i.test(logs)) {
+    return "Build token invalido na Cloudflare. Em Workers > Settings > Builds > API token, crie ou selecione um build token novo e rode o deploy novamente.";
+  }
+  return `Build ${outcome || status || "falhou"}`;
 }
 
 export async function deleteSite(env: Env, siteId: string): Promise<JobRecord> {

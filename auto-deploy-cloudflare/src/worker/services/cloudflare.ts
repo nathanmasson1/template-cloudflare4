@@ -50,6 +50,7 @@ export interface BuildRecord {
   build_uuid?: string;
   status?: string;
   outcome?: string;
+  build_outcome?: string;
   created_on?: string;
   finished_on?: string;
   deployment_id?: string;
@@ -244,14 +245,12 @@ export class CloudflareClient {
     return listFromResult<BuildToken>(payload.result, ["tokens"]);
   }
 
-  async createBuildToken(name: string): Promise<BuildToken> {
-    const payload = await this.request<BuildToken>("POST", `/accounts/${this.accountId}/builds/tokens`, { name });
-    return payload.result;
-  }
-
   async ensureBuildToken(): Promise<string> {
     const tokens = await this.listBuildTokens();
-    const token = tokens[0] || (await this.createBuildToken("Auto Deploy Cloudflare"));
+    const token = [...tokens].reverse().find((candidate) => candidate.build_token_uuid || candidate.uuid || candidate.id);
+    if (!token) {
+      throw new Error("Nenhum build token disponivel. Crie ou selecione um build token em Worker > Settings > Builds > API token e tente novamente.");
+    }
     const uuid = token.build_token_uuid || token.uuid || token.id;
     if (!uuid) {
       throw new Error(`Nao consegui obter UUID do build token. Chaves retornadas: ${Object.keys(token).join(", ") || "nenhuma"}.`);

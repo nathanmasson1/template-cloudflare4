@@ -298,6 +298,20 @@ function SettingsPage({ settings, onSaved }: { settings: PublicSettings | null; 
         <article className="guide-card">
           <span className="step-number">3</span>
           <div>
+            <h3>Confira o Build token do Worker</h3>
+            <p>
+              Workers Builds usa um Build token proprio para fazer deploy. Se o log mostrar "build token deleted or rolled",
+              abra o Worker no dashboard, va em Settings &gt; Builds &gt; API token e crie ou selecione um build token valido.
+            </p>
+            <div className="button-row">
+              <ExternalButton href={CLOUDFLARE_WORKERS_PAGES_URL}>Abrir Workers & Pages</ExternalButton>
+            </div>
+          </div>
+        </article>
+
+        <article className="guide-card">
+          <span className="step-number">4</span>
+          <div>
             <h3>Salve e escolha a conta</h3>
             <p>
               Cole o token aqui, salve, clique em Listar contas e escolha a conta Cloudflare onde os Workers, D1, R2 e KV
