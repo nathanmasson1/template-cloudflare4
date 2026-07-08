@@ -118,7 +118,7 @@ export async function startDeploy(env: Env, payload: DeployRequest): Promise<Job
     const git = await validateGithubTemplate(template.githubUrl);
     await addJobEvent(env, job.id, `Template OK: ${git.owner}/${git.repo}@${git.branch}`);
 
-    const { cf, token } = await getCloudflareClient(env);
+    const { cf, settings, token } = await getCloudflareClient(env);
 
     await updateJob(env, job, "Verificando permissao Workers Builds");
     await cf.assertBuildsAccess();
@@ -167,7 +167,7 @@ export async function startDeploy(env: Env, payload: DeployRequest): Promise<Job
       repoName: git.repo,
     });
     await addJobEvent(env, job.id, `Repo connection: ${repoConnectionUuid}`);
-    const buildTokenUuid = await cf.ensureBuildToken();
+    const buildTokenUuid = await cf.ensureBuildToken(settings.buildTokenUuid || "");
     await addJobEvent(env, job.id, `Build token: ${buildTokenUuid}`);
     site.repoConnectionUuid = repoConnectionUuid;
     site.raw = { ...site.raw, github: git, buildTokenUuid };
@@ -284,6 +284,62 @@ function buildFailureMessage(status: string, outcome: string, logs: string): str
     return "Build token invalido na Cloudflare. Em Workers > Settings > Builds > API token, crie ou selecione um build token novo e rode o deploy novamente.";
   }
   return `Build ${outcome || status || "falhou"}`;
+}
+
+export async function retryBuild(env: Env, siteId: string): Promise<JobRecord> {
+  const site = await getSite(env, siteId);
+  if (!site) throw new Error("Site nao encontrado.");
+  if (!site.buildTriggerId) throw new Error("Site sem trigger de build para reiniciar.");
+
+  const now = nowIso();
+  const job: Omit<JobRecord, "logs"> = {
+    id: randomId("job_"),
+    siteId,
+    operation: "build",
+    status: "running",
+    currentStep: "Reiniciando build",
+    result: {},
+    error: "",
+    createdAt: now,
+    updatedAt: now,
+  };
+  await saveJob(env, job);
+  await addJobEvent(env, job.id, "== Reiniciando build ==");
+
+  try {
+    const { cf, settings } = await getCloudflareClient(env);
+    const buildTokenUuid = await cf.ensureBuildToken(settings.buildTokenUuid || "");
+    await addJobEvent(env, job.id, `Build token: ${buildTokenUuid}`);
+    await cf.setBuildTriggerToken(site.buildTriggerId, buildTokenUuid);
+    await addJobEvent(env, job.id, "Trigger atualizado com Build token selecionado");
+    const buildId = await cf.runBuild(site.buildTriggerId, "main");
+
+    site.buildId = buildId;
+    site.status = "building";
+    site.error = "";
+    site.raw = { ...site.raw, buildTokenUuid };
+    site.updatedAt = nowIso();
+    await saveSite(env, site);
+
+    await saveJob(env, {
+      ...job,
+      status: "done",
+      currentStep: "Build reiniciado",
+      result: { site, buildId, triggerId: site.buildTriggerId },
+      updatedAt: nowIso(),
+    });
+    await addJobEvent(env, job.id, `Build reiniciado: ${buildId}`);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    site.status = "failed";
+    site.error = message;
+    site.updatedAt = nowIso();
+    await saveSite(env, site);
+    await saveJob(env, { ...job, status: "failed", currentStep: "Falhou", error: message, updatedAt: nowIso() });
+    await addJobEvent(env, job.id, `ERRO: ${message}`, "error");
+  }
+
+  return (await getJob(env, job.id))!;
 }
 
 export async function deleteSite(env: Env, siteId: string): Promise<JobRecord> {

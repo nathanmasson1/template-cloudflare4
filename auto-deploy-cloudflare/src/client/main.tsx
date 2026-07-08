@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
-import type { CloudflareAccount, JobRecord, PublicSettings, SiteRecord, TemplateRecord } from "../shared/types";
+import type { CloudflareAccount, CloudflareBuildToken, JobRecord, PublicSettings, SiteRecord, TemplateRecord } from "../shared/types";
 import "./styles.css";
 
 type Page = "dashboard" | "settings" | "templates" | "deploy" | "sites" | "domains";
@@ -221,14 +221,19 @@ function SettingsPage({ settings, onSaved }: { settings: PublicSettings | null; 
   const [token, setToken] = useState("");
   const [accountId, setAccountId] = useState(settings?.accountId || "");
   const [accountName, setAccountName] = useState(settings?.accountName || "");
+  const [buildTokenUuid, setBuildTokenUuid] = useState(settings?.buildTokenUuid || "");
+  const [buildTokenName, setBuildTokenName] = useState(settings?.buildTokenName || "");
   const [ack, setAck] = useState(Boolean(settings?.githubAppAcknowledged));
   const [paid, setPaid] = useState(Boolean(settings?.cloudflarePaidPlan));
   const [accounts, setAccounts] = useState<CloudflareAccount[]>([]);
+  const [buildTokens, setBuildTokens] = useState<CloudflareBuildToken[]>([]);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
     setAccountId(settings?.accountId || "");
     setAccountName(settings?.accountName || "");
+    setBuildTokenUuid(settings?.buildTokenUuid || "");
+    setBuildTokenName(settings?.buildTokenName || "");
     setAck(Boolean(settings?.githubAppAcknowledged));
     setPaid(Boolean(settings?.cloudflarePaidPlan));
   }, [settings]);
@@ -242,6 +247,8 @@ function SettingsPage({ settings, onSaved }: { settings: PublicSettings | null; 
         cloudflareToken: token,
         accountId,
         accountName,
+        buildTokenUuid,
+        buildTokenName,
         githubAppAcknowledged: ack,
         cloudflarePaidPlan: paid,
       }),
@@ -255,6 +262,23 @@ function SettingsPage({ settings, onSaved }: { settings: PublicSettings | null; 
     setMessage("");
     const data = await api<{ accounts: CloudflareAccount[] }>("/api/cloudflare/accounts");
     setAccounts(data.accounts);
+  }
+
+  async function loadBuildTokens() {
+    setMessage("");
+    const data = await api<{ buildTokens: CloudflareBuildToken[] }>("/api/cloudflare/build-tokens");
+    setBuildTokens(data.buildTokens);
+    if (data.buildTokens.length === 1) {
+      setBuildTokenUuid(data.buildTokens[0].uuid);
+      setBuildTokenName(data.buildTokens[0].name);
+    }
+    setMessage(data.buildTokens.length ? "Build tokens carregados. Selecione o token correto e clique em Salvar." : "Nenhum Build token retornado pela Cloudflare.");
+  }
+
+  function selectBuildToken(uuid: string) {
+    const selected = buildTokens.find((item) => item.uuid === uuid);
+    setBuildTokenUuid(uuid);
+    setBuildTokenName(selected?.name || "");
   }
 
   return (
@@ -366,6 +390,18 @@ function SettingsPage({ settings, onSaved }: { settings: PublicSettings | null; 
           <input value={accountName} onChange={(event) => setAccountName(event.target.value)} placeholder="Nome visivel da conta" />
           <small>Opcional, serve para voce reconhecer a conta no painel.</small>
         </label>
+        <label className="wide">
+          <span>Workers Builds API token</span>
+          <select value={buildTokenUuid} onChange={(event) => selectBuildToken(event.target.value)}>
+            <option value="">{buildTokenName ? `${buildTokenName} (${buildTokenUuid})` : "Liste e selecione um Build token valido"}</option>
+            {buildTokens.map((item) => (
+              <option key={item.uuid} value={item.uuid}>
+                {item.name} ({item.uuid})
+              </option>
+            ))}
+          </select>
+          <small>Este e o Build token usado pelo Workers Builds. Se escolher um token rolado/deletado, o build falha antes de clonar o GitHub.</small>
+        </label>
         <label className="check wide">
           <input type="checkbox" checked={ack} onChange={(event) => setAck(event.target.checked)} />
           <span>Ja autorizei o GitHub App "Cloudflare Workers and Pages" para acessar o repositorio do template.</span>
@@ -377,6 +413,7 @@ function SettingsPage({ settings, onSaved }: { settings: PublicSettings | null; 
         <div className="actions wide">
           <button type="submit">Salvar</button>
           <button type="button" className="secondary" onClick={loadAccounts}>Listar contas</button>
+          <button type="button" className="secondary" onClick={loadBuildTokens}>Listar Build tokens</button>
         </div>
       </form>
       {accounts.length > 0 && (
@@ -596,6 +633,15 @@ function DeployPage({
 }
 
 function SitesPage({ sites, onJob, onChanged }: { sites: SiteRecord[]; onJob: (jobId: string) => void; onChanged: () => Promise<void> }) {
+  async function retry(site: SiteRecord) {
+    const data = await api<{ job: JobRecord }>(`/api/sites/${site.id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ action: "retry-build" }),
+    });
+    onJob(data.job.id);
+    await onChanged();
+  }
+
   async function remove(site: SiteRecord) {
     const data = await api<{ job: JobRecord }>(`/api/sites/${site.id}`, { method: "DELETE" });
     onJob(data.job.id);
@@ -617,6 +663,7 @@ function SitesPage({ sites, onJob, onChanged }: { sites: SiteRecord[]; onJob: (j
               {site.workersDevUrl && <a href={site.workersDevUrl} target="_blank">Site</a>}
               {site.adminUrl && <a href={site.adminUrl} target="_blank">Admin</a>}
             </div>
+            {site.buildTriggerId && <button className="secondary" onClick={() => retry(site)}>Retry build</button>}
             <button className="danger" onClick={() => remove(site)}>Excluir</button>
           </div>
         ))}

@@ -13,11 +13,11 @@ import {
   upsertTemplate,
 } from "./lib/db";
 import { jsonError, requireString } from "./lib/http";
-import { deleteSite, refreshJob, startDeploy } from "./services/deployer";
+import { deleteSite, refreshJob, retryBuild, startDeploy } from "./services/deployer";
 import { CloudflareClient } from "./services/cloudflare";
 import { validateGithubTemplate } from "./services/github";
 import { maskSecret, nowIso, parseGithubTemplateUrl, randomId } from "../shared/utils";
-import type { CloudflareSettings, DeployRequest, PublicSettings, TemplateRecord } from "../shared/types";
+import type { CloudflareBuildToken, CloudflareSettings, DeployRequest, PublicSettings, TemplateRecord } from "../shared/types";
 
 type HonoEnv = {
   Bindings: Env;
@@ -79,6 +79,8 @@ app.post("/api/settings/cloudflare", async (context) => {
     cloudflareToken?: string;
     accountId?: string;
     accountName?: string;
+    buildTokenUuid?: string;
+    buildTokenName?: string;
     githubAppAcknowledged?: boolean;
     cloudflarePaidPlan?: boolean;
   };
@@ -87,6 +89,8 @@ app.post("/api/settings/cloudflare", async (context) => {
     ...current,
     accountId: String(body.accountId ?? current.accountId ?? "").trim(),
     accountName: String(body.accountName ?? current.accountName ?? "").trim(),
+    buildTokenUuid: String(body.buildTokenUuid ?? current.buildTokenUuid ?? "").trim(),
+    buildTokenName: String(body.buildTokenName ?? current.buildTokenName ?? "").trim(),
     githubAppAcknowledged: Boolean(body.githubAppAcknowledged ?? current.githubAppAcknowledged),
     cloudflarePaidPlan: Boolean(body.cloudflarePaidPlan ?? current.cloudflarePaidPlan),
   };
@@ -120,6 +124,15 @@ app.get("/api/cloudflare/accounts", async (context) => {
   if (!token) return jsonError("Cadastre o Cloudflare API Token primeiro.");
   const accounts = await new CloudflareClient(token).accounts();
   return context.json({ accounts });
+});
+
+app.get("/api/cloudflare/build-tokens", async (context) => {
+  const settings = await getSettings(context.env);
+  const token = settings.tokenCipher ? await decryptText(settings.tokenCipher, context.env.TOKEN_ENCRYPTION_KEY) : "";
+  if (!token) return jsonError("Cadastre o Cloudflare API Token primeiro.");
+  if (!settings.accountId) return jsonError("Selecione o Account ID primeiro.");
+  const buildTokens: CloudflareBuildToken[] = await new CloudflareClient(token, settings.accountId).publicBuildTokens();
+  return context.json({ buildTokens });
 });
 
 app.get("/api/templates", async (context) => context.json({ templates: await listTemplates(context.env) }));
@@ -194,6 +207,10 @@ app.patch("/api/sites/:id", async (context) => {
     const job = jobs?.id ? await refreshJob(context.env, jobs.id) : null;
     return context.json({ site, job });
   }
+  if (body.action === "retry-build") {
+    const job = await retryBuild(context.env, context.req.param("id"));
+    return context.json({ job });
+  }
   return jsonError("Acao nao suportada.", 400);
 });
 
@@ -238,6 +255,8 @@ function publicSettings(settings: CloudflareSettings): PublicSettings {
     tokenMask: settings.tokenMask || "",
     accountId: settings.accountId || "",
     accountName: settings.accountName || "",
+    buildTokenUuid: settings.buildTokenUuid || "",
+    buildTokenName: settings.buildTokenName || "",
     githubAppAcknowledged: Boolean(settings.githubAppAcknowledged),
     cloudflarePaidPlan: Boolean(settings.cloudflarePaidPlan),
   };

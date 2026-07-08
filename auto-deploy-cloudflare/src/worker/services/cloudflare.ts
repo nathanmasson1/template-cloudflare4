@@ -1,4 +1,4 @@
-import type { CloudflareAccount } from "../../shared/types";
+import type { CloudflareAccount, CloudflareBuildToken } from "../../shared/types";
 import { cloudflareErrorMessage } from "../lib/http";
 
 const API_BASE = "https://api.cloudflare.com/client/v4";
@@ -245,9 +245,27 @@ export class CloudflareClient {
     return listFromResult<BuildToken>(payload.result, ["tokens"]);
   }
 
-  async ensureBuildToken(): Promise<string> {
+  async publicBuildTokens(): Promise<CloudflareBuildToken[]> {
+    return (await this.listBuildTokens())
+      .map((token) => ({
+        uuid: token.build_token_uuid || token.uuid || token.id || "",
+        name: token.build_token_name || token.name || "Build token sem nome",
+        cloudflareTokenId: token.cloudflare_token_id || "",
+      }))
+      .filter((token) => token.uuid);
+  }
+
+  async ensureBuildToken(preferredUuid = ""): Promise<string> {
     const tokens = await this.listBuildTokens();
-    const token = [...tokens].reverse().find((candidate) => candidate.build_token_uuid || candidate.uuid || candidate.id);
+    const preferred = preferredUuid
+      ? tokens.find((candidate) => [candidate.build_token_uuid, candidate.uuid, candidate.id].includes(preferredUuid))
+      : null;
+    if (preferredUuid && !preferred) return preferredUuid;
+    if (preferred) return preferred.build_token_uuid || preferred.uuid || preferred.id || preferredUuid;
+    if (tokens.length > 1) {
+      throw new Error("Selecione um Build token em Credenciais antes de criar sites. Evitei escolher automaticamente porque ha mais de um token e alguns podem estar rolados/invalidos.");
+    }
+    const token = tokens.find((candidate) => candidate.build_token_uuid || candidate.uuid || candidate.id);
     if (!token) {
       throw new Error("Nenhum build token disponivel. Crie ou selecione um build token em Worker > Settings > Builds > API token e tente novamente.");
     }
@@ -291,6 +309,12 @@ export class CloudflareClient {
       Object.entries(variables).map(([key, value]) => [key, { value, is_secret: false }]),
     );
     await this.request("PATCH", `/accounts/${this.accountId}/builds/triggers/${triggerId}/environment_variables`, payload);
+  }
+
+  async setBuildTriggerToken(triggerId: string, buildTokenUuid: string): Promise<void> {
+    await this.request("PATCH", `/accounts/${this.accountId}/builds/triggers/${triggerId}`, {
+      build_token_uuid: buildTokenUuid,
+    });
   }
 
   async runBuild(triggerId: string, branch: string): Promise<string> {

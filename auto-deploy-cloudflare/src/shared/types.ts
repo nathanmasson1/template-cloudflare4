@@ -15,6 +15,8 @@ export interface CloudflareSettings {
   accountName?: string;
   tokenCipher?: string;
   tokenMask?: string;
+  buildTokenUuid?: string;
+  buildTokenName?: string;
   githubAppAcknowledged?: boolean;
   cloudflarePaidPlan?: boolean;
 }
@@ -24,6 +26,8 @@ export interface PublicSettings {
   tokenMask: string;
   accountId: string;
   accountName: string;
+  buildTokenUuid: string;
+  buildTokenName: string;
   githubAppAcknowledged: boolean;
   cloudflarePaidPlan: boolean;
 }
@@ -95,6 +99,12 @@ export interface DeployRequest {
 export interface CloudflareAccount {
   id: string;
   name: string;
+}
+
+export interface CloudflareBuildToken {
+  uuid: string;
+  name: string;
+  cloudflareTokenId: string;
 }
 
 export interface ApiError {
