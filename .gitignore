@@ -10,6 +10,8 @@ node_modules/
 # environment variables
 .env
 .env.*
+.dev.vars
+.dev.vars.*
 
 # OS
 .DS_Store
