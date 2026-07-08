@@ -1,0 +1,12 @@
+---
+export const prerender = false;
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import SettingsFeedsRobots from '../../plugins/feeds-robots/SettingsFeedsRobots';
+---
+<AdminLayout title="RSS e Robots" activeSection="plugins">
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold text-slate-900">RSS e Robots</h1>
+        <p class="text-slate-500 mt-1">Configure os arquivos publicos /rss.xml e /robots.txt usados por leitores, buscadores e IAs.</p>
+    </div>
+    <SettingsFeedsRobots client:load />
+</AdminLayout>

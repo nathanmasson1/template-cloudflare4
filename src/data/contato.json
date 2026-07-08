@@ -1,0 +1,96 @@
+{
+  "seo": {
+    "title": "Contato",
+    "description": "Entre em contato com a Exemplo para divulgar eventos, negócios, serviços, oportunidades ou enviar sugestões de pauta.",
+    "image": "/images/credencial-hero.svg"
+  },
+  "hero": {
+    "label": "Contato",
+    "title": "Fale",
+    "titleAccent": "com a Exemplo ",
+    "subtitle": "Tem um evento, negócio, serviço, lançamento ou oportunidade para divulgar? Envie para a nossa redação."
+  },
+  "methods": [
+    {
+      "icon": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z\"/><polyline points=\"22,6 12,13 2,6\"/></svg>",
+      "title": "E-mail",
+      "detail": "contato@Exemplo.com.br",
+      "description": "Envie pauta, sugestão, correção, convite ou proposta editorial."
+    },
+    {
+      "icon": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 7h-7.5l-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z\"/><path d=\"M8 13h8\"/><path d=\"M8 16h5\"/></svg>",
+      "title": "Pautas de divulgação",
+      "detail": "eventos, negócios e serviços",
+      "description": "Recebemos informações de produtores, empreendedores, assessorias, marcas e leitores."
+    }
+  ],
+  "form": {
+    "title": "Envie uma mensagem",
+    "subtitle": "Preencha o formulário abaixo e retornaremos o mais breve possível.",
+    "nameLabel": "Nome",
+    "namePlaceholder": "Seu nome",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "seu@email.com",
+    "subjectLabel": "Assunto",
+    "subjectPlaceholder": "Selecione um assunto",
+    "subjects": [
+      {
+        "value": "sugestao",
+        "label": "Sugestão de pauta"
+      },
+      {
+        "value": "evento",
+        "label": "Divulgar evento"
+      },
+      {
+        "value": "negocio",
+        "label": "Divulgar negócio"
+      },
+      {
+        "value": "servico",
+        "label": "Divulgar serviço"
+      },
+      {
+        "value": "release",
+        "label": "Enviar release"
+      },
+      {
+        "value": "correcao",
+        "label": "Correção de informação"
+      },
+      {
+        "value": "parceria",
+        "label": "Proposta de parceria"
+      },
+      {
+        "value": "outro",
+        "label": "Outro"
+      }
+    ],
+    "messageLabel": "Mensagem",
+    "messagePlaceholder": "Conte o que deseja divulgar, com nome, data, cidade, público, link oficial e principais diferenciais...",
+    "submitText": "Enviar mensagem",
+    "successText": "Mensagem enviada!"
+  },
+  "faq": {
+    "title": "Perguntas frequentes",
+    "items": [
+      {
+        "q": "Vocês vendem ingressos ou serviços diretamente?",
+        "a": "Não. O site publica conteúdo editorial e informativo. Quando houver parceria, publicidade ou relação comercial, a informação deve ser identificada com clareza."
+      },
+      {
+        "q": "Posso enviar um evento para divulgação?",
+        "a": "Sim. Envie data, horário, local, programação, link oficial, informações de inscrição e contatos de confirmação."
+      },
+      {
+        "q": "Como pedir uma correção?",
+        "a": "Informe o link da publicação, o trecho questionado e a fonte correta para contato@Exemplo.com.br."
+      },
+      {
+        "q": "Posso sugerir uma pauta?",
+        "a": "Sim. Envie contexto, cidade, segmento, público, links oficiais e o motivo pelo qual a pauta pode interessar aos leitores."
+      }
+    ]
+  }
+}

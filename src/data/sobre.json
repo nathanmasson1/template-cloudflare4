@@ -1,0 +1,83 @@
+{
+  "seo": {
+    "title": "Sobre a Exemplo ",
+    "description": "Conheça a Exemplo, portal brasileiro focado em divulgação de eventos, negócios, serviços e oportunidades.",
+    "image": "/images/credencial-hero.svg"
+  },
+  "hero": {
+    "label": "Sobre",
+    "title": "Divulgação com contexto",
+    "titleAccent": "para eventos e negócios reais",
+    "paragraphs": [
+      "A Exemplo aproxima produtores, empresas, marcas locais e prestadores de serviço de públicos interessados em descobrir oportunidades.",
+      "Nossa proposta é publicar conteúdo claro, responsável e verificável para que cada evento, negócio ou lançamento seja apresentado com profissionalismo."
+    ],
+    "stats": [
+      {
+        "number": "100%",
+        "label": "conteúdo informativo"
+      },
+      {
+        "number": "BR",
+        "label": "olhar brasileiro"
+      },
+      {
+        "number": "Foco",
+        "label": "visibilidade útil"
+      }
+    ]
+  },
+  "mission": {
+    "label": "Nossa missão",
+    "title": "Transformar divulgação em presença confiável",
+    "subtitle": "Cada publicação nasce para organizar informações, valorizar diferenciais e ajudar o público a entender por que vale prestar atenção.",
+    "items": [
+      {
+        "number": "01",
+        "title": "Clareza",
+        "text": "Escrevemos em português direto, com acentuação correta, datas legíveis e informações essenciais em primeiro plano."
+      },
+      {
+        "number": "02",
+        "title": "Contexto",
+        "text": "Explicamos público, proposta, local, serviço, programação e diferenciais para reduzir ruído na decisão."
+      },
+      {
+        "number": "03",
+        "title": "Oportunidade",
+        "text": "Eventos e negócios ganham espaço para comunicar valor sem depender apenas de chamadas rápidas nas redes sociais."
+      },
+      {
+        "number": "04",
+        "title": "Transparência",
+        "text": "Sinalizamos publicidade, parcerias e relações comerciais quando existirem."
+      }
+    ]
+  },
+  "values": [
+    {
+      "title": "Visibilidade com responsabilidade",
+      "text": "Divulgar bem não é exagerar; é apresentar informações certas para o público certo."
+    },
+    {
+      "title": "Negócios mais encontrados",
+      "text": "Serviços, marcas locais e empresas precisam de presença clara para gerar confiança antes do primeiro contato."
+    },
+    {
+      "title": "Eventos mais compreensíveis",
+      "text": "Data, local, programação, inscrição e diferenciais devem aparecer de forma objetiva e fácil de confirmar."
+    }
+  ],
+  "cta": {
+    "title": "Tem uma sugestão de pauta?",
+    "text": "Envie ideias sobre eventos, negócios, lançamentos, serviços, campanhas de divulgação ou iniciativas locais.",
+    "ctaPrimary": {
+      "text": "Enviar mensagem",
+      "href": "/contato"
+    },
+    "ctaSecondary": {
+      "text": "Ler conteúdos",
+      "href": "/blog"
+    }
+  }
+}

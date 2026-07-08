@@ -1,0 +1,44 @@
+{
+  "socialImage": "/images/og-default.svg",
+  "postsGrid": {
+    "title": "Divulgação de eventos e negócios",
+    "subtitle": "Materiais práticos desenvolvidos para estruturar informações, ampliar a presença digital, conquistar novos públicos e comunicar o valor do seu trabalho de forma clara e estratégica.",
+    "limit": 9,
+    "ctaText": "Ver todos os conteúdos",
+    "ctaHref": "/blog"
+  },
+  "about": {
+    "label": "Sobre",
+    "title": "Uma vitrine editorial",
+    "titleAccent": "para quem movimenta o mercado",
+    "text1": "Site exemplo nasceu para aproximar eventos, empresas e iniciativas do público que pode se interessar por elas.",
+    "text2": "Reunimos as informações mais importantes, evidenciamos os principais diferenciais e compartilhamos conteúdos estratégicos para fortalecer a presença, gerar credibilidade e ampliar as oportunidades de conexão com o público.",
+    "imagePrimary": "/uploads/1783187173125-about-imageprimary.jpg",
+    "imageSecondary": "/uploads/1783187155802-about-imagesecondary.jpg",
+    "ctaPrimary": {
+      "text": "Conheça o projeto",
+      "href": "/sobre"
+    },
+    "ctaSecondary": {
+      "text": "Enviar pauta",
+      "href": "/contato"
+    },
+    "features": [
+      {
+        "number": "01",
+        "title": "Informação organizada",
+        "description": "Datas, locais, públicos, serviços e diferenciais aparecem com clareza para facilitar a decisão."
+      },
+      {
+        "number": "02",
+        "title": "Presença profissional",
+        "description": "Textos, imagens e chamadas ajudam eventos e negócios a parecerem preparados para receber atenção."
+      },
+      {
+        "number": "03",
+        "title": "Divulgação contínua",
+        "description": "Conteúdo editorial orienta campanhas, parcerias, redes sociais e relacionamento com a imprensa."
+      }
+    ]
+  }
+}

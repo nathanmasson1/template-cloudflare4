@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import BlogListing from '../../../../components/BlogListing.astro';
+import { getBlogListingData } from '../../../../lib/blogListing';
+
+const categorySlug = String(Astro.params.category || '').trim().toLowerCase();
+const currentPage = Number(Astro.params.page || '1');
+
+if (!Number.isInteger(currentPage) || currentPage < 1) {
+  return new Response('Pagina nao encontrada', { status: 404 });
+}
+
+const data = await getBlogListingData({ categorySlug, page: currentPage });
+
+if (!data.selectedCategoryInfo || currentPage > data.totalPages) {
+  return new Response('Pagina nao encontrada', { status: 404 });
+}
+
+const pageTitle = `${data.selectedCategoryInfo.name} - Pagina ${currentPage}`;
+const pageDescription = data.selectedCategoryInfo.description || 'Guias selecionados desta editoria.';
+const basePath = `/blog/${data.selectedCategoryInfo.slug}`;
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  image="/images/og-default.svg"
+>
+  <BlogListing
+    categories={data.categories}
+    posts={data.posts}
+    selectedCategoryInfo={data.selectedCategoryInfo}
+    currentPage={data.currentPage}
+    totalPages={data.totalPages}
+    totalPosts={data.totalPosts}
+    basePath={basePath}
+  />
+</BaseLayout>
+

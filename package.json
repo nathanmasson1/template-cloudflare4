@@ -1,0 +1,43 @@
+{
+  "name": "credencial-online",
+  "version": "1.0.0",
+  "description": "Portal brasileiro de divulgação de eventos, negócios, serviços e oportunidades.",
+  "type": "module",
+  "scripts": {
+    "dev": "set NODE_ENV=development&& astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "deploy": "astro build && node scripts/prepare-cloudflare-assets.mjs && wrangler deploy",
+    "cf:types": "wrangler types",
+    "setup:cloudflare": "node scripts/setup-cloudflare.mjs",
+    "cf:assetsignore": "node scripts/prepare-cloudflare-assets.mjs",
+    "seed:d1:sql": "node scripts/export-posts-d1-sql.mjs",
+    "seed:data:d1:sql": "node scripts/export-site-data-d1-sql.mjs",
+    "d1:migrate:local": "wrangler d1 migrations apply credencial-online-db --local",
+    "d1:migrate:remote": "wrangler d1 migrations apply credencial-online-db --remote",
+    "astro": "astro"
+  },
+  "keywords": [],
+  "author": "Redação Credencial Online",
+  "license": "ISC",
+  "dependencies": {
+    "@astrojs/cloudflare": "12.6.6",
+    "@astrojs/react": "4.4.2",
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/tailwind": "^6.0.2",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "astro": "5.18.2",
+    "fast-xml-parser": "^5.7.2",
+    "lucide-react": "^1.14.0",
+    "marked": "^18.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-quill-new": "^3.8.3",
+    "tailwindcss": "^3.4.19"
+  },
+  "devDependencies": {
+    "wrangler": "4.14.1"
+  }
+}

@@ -1,0 +1,26 @@
+{
+    "items": [
+        {
+            "label": "Home",
+            "href": "/",
+            "showCategories": false
+        },
+        {
+            "label": "Eventos",
+            "href": "/blog/eventos",
+            "showCategories": false
+        },
+        {
+            "label": "Negócios",
+            "href": "/blog/negocios"
+        },
+        {
+            "label": "Sobre",
+            "href": "/sobre"
+        },
+        {
+            "label": "Contato",
+            "href": "/contato"
+        }
+    ]
+}

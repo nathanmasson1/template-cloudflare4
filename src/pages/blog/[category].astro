@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogListing from '../../components/BlogListing.astro';
+import { getBlogListingData } from '../../lib/blogListing';
+
+const categorySlug = String(Astro.params.category || '').trim().toLowerCase();
+const data = await getBlogListingData({ categorySlug, page: 1 });
+
+if (!data.selectedCategoryInfo) {
+  return new Response('Categoria nao encontrada', { status: 404 });
+}
+
+const pageTitle = data.selectedCategoryInfo.name;
+const pageDescription = data.selectedCategoryInfo.description || 'Guias selecionados desta editoria.';
+const basePath = `/blog/${data.selectedCategoryInfo.slug}`;
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  image="/images/og-default.svg"
+>
+  <BlogListing
+    categories={data.categories}
+    posts={data.posts}
+    selectedCategoryInfo={data.selectedCategoryInfo}
+    currentPage={data.currentPage}
+    totalPages={data.totalPages}
+    totalPosts={data.totalPosts}
+    basePath={basePath}
+  />
+</BaseLayout>
+

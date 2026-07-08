@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { readDataAsync } from '../lib/readData';
+
+const data = await readDataAsync<any>('privacy.json', {});
+const title = data.title || 'Política de Privacidade';
+const lastUpdated = data.lastUpdated || '';
+const intro = data.intro || '';
+const sections = Array.isArray(data.content) ? data.content : [];
+---
+
+<BaseLayout title={title} description="Política de Privacidade da Credencial Online.">
+  <main class="legal-page">
+    <section class="legal-hero">
+      <div class="container legal-hero-inner">
+        <p class="section-label">Legal</p>
+        <h1 class="legal-title">{title}</h1>
+        {lastUpdated && <p class="legal-updated">Atualizado em {lastUpdated}</p>}
+      </div>
+    </section>
+
+    <section class="legal-content section">
+      <div class="container legal-container">
+        {intro && <p class="legal-intro">{intro}</p>}
+
+        {sections.map((section: any) => (
+          <article class="legal-section">
+            <h2 class="legal-section-title">{section.title}</h2>
+            {section.text && <p class="legal-section-text">{section.text}</p>}
+            {(section.paragraphs || []).map((paragraph: string) => (
+              <p class="legal-section-text">{paragraph}</p>
+            ))}
+            {Array.isArray(section.items) && section.items.length > 0 && (
+              <ul class="legal-list">
+                {section.items.map((item: string) => <li>{item}</li>)}
+              </ul>
+            )}
+            {section.note && <p class="legal-note">{section.note}</p>}
+          </article>
+        ))}
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .legal-page {
+    background: var(--color-bg);
+  }
+
+  .legal-hero {
+    padding: calc(var(--navbar-height) + var(--space-4xl)) 0 var(--space-3xl);
+    background: linear-gradient(135deg, var(--color-bg-warm), var(--color-bg-cool));
+    text-align: center;
+  }
+
+  .legal-title {
+    font-family: var(--font-heading);
+    font-size: var(--fs-5xl);
+    font-weight: var(--fw-extrabold);
+    letter-spacing: 0;
+    line-height: var(--lh-tight);
+    margin-top: var(--space-sm);
+  }
+
+  .legal-updated {
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+    margin-top: var(--space-md);
+  }
+
+  .legal-container {
+    max-width: 840px;
+  }
+
+  .legal-intro {
+    color: var(--color-text-secondary);
+    font-size: var(--fs-lg);
+    line-height: var(--lh-relaxed);
+    padding-bottom: var(--space-2xl);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .legal-section {
+    padding: var(--space-2xl) 0;
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .legal-section:first-child {
+    padding-top: 0;
+  }
+
+  .legal-section:last-child {
+    border-bottom: 0;
+  }
+
+  .legal-section-title {
+    font-family: var(--font-heading);
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-bold);
+    letter-spacing: 0;
+    margin-bottom: var(--space-md);
+  }
+
+  .legal-section-text {
+    color: var(--color-text-secondary);
+    font-size: var(--fs-md);
+    line-height: var(--lh-relaxed);
+    margin-bottom: var(--space-md);
+  }
+
+  .legal-list {
+    display: grid;
+    gap: var(--space-sm);
+    color: var(--color-text-secondary);
+    font-size: var(--fs-md);
+    line-height: var(--lh-relaxed);
+    padding-left: 1.25rem;
+    list-style: disc;
+  }
+
+  .legal-note {
+    margin-top: var(--space-md);
+    padding: var(--space-md);
+    color: var(--color-text-primary);
+    background: var(--color-bg-warm);
+    border-left: 3px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    line-height: var(--lh-relaxed);
+  }
+</style>

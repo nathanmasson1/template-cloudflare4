@@ -1,0 +1,77 @@
+{
+  "cta": {
+    "title": "Tem um evento, negócio ou lançamento para divulgar?",
+    "titleAccent": "Envie para a Exemplo ",
+    "text": "Recebemos sugestões de pauta sobre eventos, empresas, serviços, iniciativas locais, feiras, congressos e oportunidades."
+  },
+  "about": "Portal brasileiro de divulgação de eventos e negócios, com conteúdo claro para marcas, produtores, empreendedores e públicos interessados.",
+  "social": [
+    {
+      "label": "Instagram",
+      "href": "https://www.instagram.com/",
+      "icon": "<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><rect x=\"2\" y=\"2\" width=\"20\" height=\"20\" rx=\"5\"/><circle cx=\"12\" cy=\"12\" r=\"5\"/><circle cx=\"17.5\" cy=\"6.5\" r=\"1.5\" fill=\"currentColor\" stroke=\"none\"/></svg>"
+    },
+    {
+      "label": "YouTube",
+      "href": "https://www.youtube.com/",
+      "icon": "<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.43z\"/><polygon points=\"9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02\" fill=\"currentColor\" stroke=\"none\"/></svg>"
+    }
+  ],
+  "columns": [
+    {
+      "heading": "Navegação",
+      "links": [
+        {
+          "href": "/",
+          "label": "Home"
+        },
+        {
+          "href": "/blog",
+          "label": "Conteúdos"
+        },
+        {
+          "href": "/sobre",
+          "label": "Sobre"
+        },
+        {
+          "href": "/contato",
+          "label": "Contato"
+        },
+        {
+          "href": "/politica-editorial",
+          "label": "Política Editorial"
+        },
+        {
+          "href": "/privacidade",
+          "label": "Privacidade"
+        },
+        {
+          "href": "/politica-de-cookies",
+          "label": "Política de Cookies"
+        },
+        {
+          "href": "/correcoes-e-retratacoes",
+          "label": "Correções e Retratações"
+        },
+        {
+          "href": "/monetizacao-e-transparencia",
+          "label": "Monetização e Transparência"
+        },
+        {
+          "href": "/politica-de-ia",
+          "label": "Uso de Inteligência Artificial"
+        },
+        {
+          "href": "/termos",
+          "label": "Termos de Uso"
+        }
+      ]
+    }
+  ],
+  "copyright": "© {year} {siteName}. Todos os direitos reservados.",
+  "disclaimer": "Conteúdo independente e informativo sobre eventos, negócios e divulgação. Datas, valores, programações, vagas e condições podem mudar; confirme informações oficiais antes de participar, contratar ou comprar.",
+  "categoryColumn": {
+    "enabled": true,
+    "heading": "Categorias"
+  }
+}

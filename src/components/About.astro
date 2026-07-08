@@ -1,0 +1,237 @@
+---
+interface Props { data?: any; }
+const d = Astro.props.data || {};
+const label = d.label || 'Sobre a Credencial Online';
+const title = d.title || 'Uma vitrine editorial';
+const titleAccent = d.titleAccent || 'para quem movimenta o mercado';
+const text1 = d.text1 || 'A Credencial Online aproxima eventos, empresas e iniciativas do público que pode se interessar por elas.';
+const text2 = d.text2 || 'Organizamos informações essenciais e publicamos orientações para transformar divulgação em presença, confiança e oportunidade.';
+const ctaPrimary = d.ctaPrimary || { text: 'Conheça o projeto', href: '/sobre' };
+const ctaSecondary = d.ctaSecondary || { text: 'Enviar pauta', href: '/contato' };
+const imagePrimary = d.imagePrimary || '/images/credencial-negocios.jpg';
+const imageSecondary = d.imageSecondary || '/images/credencial-eventos.jpg';
+const features = d.features || [
+  { number: '01', title: 'Informação organizada', description: 'Datas, locais, públicos, serviços e diferenciais aparecem com clareza.' },
+  { number: '02', title: 'Presença profissional', description: 'Textos, imagens e chamadas ajudam eventos e negócios a parecerem preparados.' },
+  { number: '03', title: 'Divulgação contínua', description: 'Conteúdo editorial orienta campanhas, parcerias, redes sociais e imprensa.' },
+];
+---
+
+<section class="about section" id="sobre">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-media animate-on-scroll">
+        <img class="about-image-main" src={imagePrimary} alt="Painel com dados, cartão de empresa e anúncio de serviço" loading="lazy" />
+        <img class="about-image-small" src={imageSecondary} alt="Calendário de eventos com credencial e palco" loading="lazy" />
+      </div>
+
+      <div class="about-content animate-on-scroll">
+        <span class="section-label">{label}</span>
+        <h2 class="about-title">
+          {title}
+          <span class="about-title-accent">{titleAccent}</span>
+        </h2>
+        <p class="about-text">{text1}</p>
+        <p class="about-text">{text2}</p>
+        <div class="about-actions">
+          <a href={ctaPrimary.href} class="btn btn-primary">
+            {ctaPrimary.text}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <a href={ctaSecondary.href} class="btn btn-outline">{ctaSecondary.text}</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-features stagger-children animate-on-scroll">
+      {features.map((feature) => (
+        <div class="about-feature">
+          <span class="about-feature-number">{feature.number}</span>
+          <div class="about-feature-content">
+            <h3 class="about-feature-title">{feature.title}</h3>
+            <p class="about-feature-text">{feature.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    background:
+      linear-gradient(180deg, #fff 0%, var(--color-bg-cool) 100%);
+    overflow: hidden;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: var(--space-4xl);
+    align-items: center;
+    margin-bottom: var(--space-3xl);
+  }
+
+  .about-media {
+    position: relative;
+    min-height: 520px;
+  }
+
+  .about-image-main,
+  .about-image-small {
+    position: absolute;
+    width: 76%;
+    height: auto;
+    object-fit: cover;
+    box-shadow: var(--shadow-lg);
+    border: 8px solid #fff;
+    border-radius: var(--radius-lg);
+  }
+
+  .about-image-main {
+    left: 0;
+    top: 0;
+    aspect-ratio: 4 / 5;
+    height: 500px;
+  }
+
+  .about-image-small {
+    right: 0;
+    bottom: 0;
+    width: 58%;
+    aspect-ratio: 4 / 3;
+    height: 260px;
+  }
+
+  .about-title {
+    font-family: var(--font-display);
+    font-size: var(--fs-4xl);
+    font-weight: 800;
+    line-height: var(--lh-tight);
+    margin-bottom: var(--space-xl);
+    text-align: left;
+  }
+
+  .about-title-accent {
+    display: block;
+    color: var(--color-primary);
+  }
+
+  .about-text {
+    font-size: var(--fs-md);
+    color: var(--color-text-secondary);
+    line-height: var(--lh-relaxed);
+    margin-bottom: var(--space-lg);
+  }
+
+  .about-actions {
+    display: flex;
+    gap: var(--space-md);
+    margin-top: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .about-features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+
+  .about-feature {
+    display: flex;
+    gap: var(--space-lg);
+    padding: var(--space-xl);
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 500ms var(--ease-out-expo) both;
+  }
+
+  .about-feature::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--color-primary);
+  }
+
+  .about-feature:nth-child(2)::before {
+    background: var(--color-accent);
+  }
+
+  .about-feature:nth-child(3)::before {
+    background: var(--color-service);
+  }
+
+  .about-feature:hover {
+    background: var(--color-bg-pure);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
+  }
+
+  .about-feature-number {
+    font-family: var(--font-display);
+    font-size: var(--fs-3xl);
+    color: rgba(15, 118, 110, 0.22);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .about-feature-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .about-feature-title {
+    font-size: var(--fs-base);
+    font-weight: var(--fw-extrabold);
+  }
+
+  .about-feature-text {
+    font-size: var(--fs-sm);
+    color: var(--color-text-muted);
+    line-height: var(--lh-normal);
+  }
+
+  @media (max-width: 900px) {
+    .about-grid,
+    .about-features {
+      grid-template-columns: 1fr;
+    }
+
+    .about-media {
+      min-height: 420px;
+    }
+
+    .about-image-main {
+      height: 390px;
+    }
+
+    .about-image-small {
+      height: 210px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .about-media {
+      min-height: auto;
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .about-image-main,
+    .about-image-small {
+      position: static;
+      width: 100%;
+      height: 240px;
+    }
+  }
+</style>

@@ -1,0 +1,12 @@
+---
+export const prerender = false;
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import SettingsLlmsTxt from '../../plugins/llms-txt/SettingsLlmsTxt';
+---
+<AdminLayout title="LLMs.txt" activeSection="plugins">
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold text-slate-900">LLMs.txt</h1>
+        <p class="text-slate-500 mt-1">Configure o arquivo publico /llms.txt para ajudar IAs a entenderem o conteudo principal do site.</p>
+    </div>
+    <SettingsLlmsTxt client:load />
+</AdminLayout>

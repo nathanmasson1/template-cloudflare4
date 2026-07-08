@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="970" height="250" viewBox="0 0 970 250" role="img" aria-labelledby="title desc">
+  <title id="title">Placeholder de anuncio dentro do post 1</title>
+  <desc id="desc">Imagem provisoria para bloco patrocinado dentro do artigo.</desc>
+  <rect width="970" height="250" rx="18" fill="#eef2ff"/>
+  <rect x="18" y="18" width="934" height="214" rx="16" fill="#fff" stroke="#c7d2fe" stroke-width="2"/>
+  <circle cx="120" cy="125" r="54" fill="#4f46e5"/>
+  <path d="M93 126h54M120 99v54" stroke="#fff" stroke-width="10" stroke-linecap="round"/>
+  <text x="205" y="108" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#312e81">Anuncio dentro do post</text>
+  <text x="205" y="146" font-family="Arial, sans-serif" font-size="17" fill="#4338ca">Bloco 1 inserido apos o paragrafo configurado</text>
+  <rect x="732" y="88" width="160" height="50" rx="25" fill="#4f46e5"/>
+  <text x="812" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#fff">Ver oferta</text>
+</svg>

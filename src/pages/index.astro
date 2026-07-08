@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostsGrid from '../components/PostsGrid.astro';
+import About from '../components/About.astro';
+import { readDataAsync } from '../lib/readData';
+
+const home = await readDataAsync('home.json');
+---
+
+<BaseLayout
+  title="Home"
+  image={home.socialImage || '/images/credencial-hero.svg'}
+>
+  <PostsGrid data={home.postsGrid} />
+  <About data={home.about} />
+</BaseLayout>

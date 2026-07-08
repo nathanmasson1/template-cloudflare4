@@ -1,0 +1,11 @@
+<svg width="460" height="96" viewBox="0 0 460 96" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="logo-placeholder-light-title logo-placeholder-light-desc">
+  <title id="logo-placeholder-light-title">Logo Placeholder Claro</title>
+  <desc id="logo-placeholder-light-desc">Placeholder generico para logo em fundo escuro.</desc>
+  <rect x="1" y="1" width="458" height="94" rx="18" fill="#0F172A" stroke="#475569" stroke-width="2" stroke-dasharray="12 10"/>
+  <rect x="24" y="22" width="52" height="52" rx="14" fill="#334155"/>
+  <path d="M38 56L47 46L55 54L62 43L70 58H38Z" fill="#CBD5E1"/>
+  <circle cx="56" cy="38" r="5" fill="#CBD5E1"/>
+  <rect x="96" y="28" width="178" height="16" rx="8" fill="#E2E8F0"/>
+  <rect x="96" y="54" width="250" height="12" rx="6" fill="#64748B"/>
+  <text x="370" y="55" fill="#F8FAFC" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" text-anchor="middle">LOGO</text>
+</svg>

@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Eventos",
+    "slug": "eventos",
+    "description": "Agenda, bastidores e estratégias para divulgar feiras, congressos, encontros, shows, workshops e experiências presenciais ou online."
+  },
+  {
+    "name": "Negócios",
+    "slug": "negocios",
+    "description": "Conteúdos para empreendedores, marcas locais, prestadores de serviço e empresas que querem ampliar presença, reputação e oportunidades."
+  }
+]

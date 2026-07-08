@@ -1,0 +1,104 @@
+{
+    "googleTag": {
+        "settings": {
+            "orgName": "Credencial Online",
+            "orgLogo": "/images/logo-placeholder.svg"
+        }
+    },
+    "ai": {
+        "provider": "openai",
+        "apiKey": "",
+        "openaiApiKey": "",
+        "geminiApiKey": "",
+        "pexelsApiKey": ""
+    },
+    "seo": {
+        "enabled": true,
+        "orgName": "Exemplo",
+        "orgLogo": "/images/logo-placeholder.svg",
+        "sameAs": [],
+        "articleSchema": true,
+        "breadcrumbSchema": true,
+        "websiteSchema": true
+    },
+    "manualAds": {
+        "enabled": true,
+        "sidebar": {
+            "enabled": true,
+            "image": "/images/ad-placeholder-sidebar.svg",
+            "url": "https://www.exemplo.com.br/contato",
+            "alt": "Anuncio lateral"
+        },
+        "inlineBlocks": [
+            {
+                "id": "inline-1",
+                "enabled": true,
+                "afterParagraph": 2,
+                "image": "/images/ad-placeholder-inline-1.svg",
+                "url": "https://www.exemplo.com.br/contato",
+                "alt": "Anuncio no artigo 1"
+            },
+            {
+                "id": "inline-2",
+                "enabled": true,
+                "afterParagraph": 5,
+                "image": "/images/ad-placeholder-inline-2.svg",
+                "url": "https://www.exemplo.com.br/contato",
+                "alt": "Anuncio no artigo 2"
+            },
+            {
+                "id": "inline-3",
+                "enabled": true,
+                "afterParagraph": 8,
+                "image": "/images/ad-placeholder-inline-3.svg",
+                "url": "https://www.exemplo.com.br/contato",
+                "alt": "Anuncio no artigo 3"
+            }
+        ],
+        "exitPopup": {
+            "enabled": true,
+            "image": "/images/ad-placeholder-exit-popup.svg",
+            "url": "https://www.exemplo.com.br/contato",
+            "alt": "Anuncio em popup"
+        }
+    },
+    "socialShare": {
+        "enabled": true,
+        "sectionTitle": "Compartilhe nas redes sociais",
+        "platforms": [
+            "facebook",
+            "twitter",
+            "whatsapp",
+            "linkedin",
+            "telegram"
+        ],
+        "style": "icon"
+    },
+    "llmsTxt": {
+        "enabled": true,
+        "summary": "",
+        "details": "Use este arquivo para encontrar rapidamente as principais paginas, categorias e artigos recentes do site.",
+        "includeCorePages": true,
+        "includeCategories": true,
+        "includePosts": true,
+        "includeFeeds": true,
+        "maxPosts": 50,
+        "extraLinks": [],
+        "optionalLinks": []
+    },
+    "feedsRobots": {
+        "rss": {
+            "enabled": true,
+            "title": "",
+            "description": "",
+            "language": "pt-br",
+            "maxItems": 200
+        },
+        "robots": {
+            "enabled": true,
+            "allowIndexing": true,
+            "includeSitemap": true,
+            "extraRules": "Disallow: /admin\nDisallow: /api"
+        }
+    }
+}

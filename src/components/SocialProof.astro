@@ -1,0 +1,202 @@
+---
+interface Props { data?: any; }
+const d = Astro.props.data || {};
+const stats = d.stats || [
+  { number: 'Agenda', suffix: '', label: 'de eventos', detail: 'informações organizadas para ajudar o público a decidir e participar' },
+  { number: 'Vitrine', suffix: '', label: 'de negócios', detail: 'apresentação objetiva de marcas, serviços e diferenciais' },
+  { number: 'Conteúdo', suffix: '', label: 'para divulgar', detail: 'guias sobre release, redes sociais e calendário editorial' },
+  { number: 'Credibilidade', suffix: '', label: 'para crescer', detail: 'comunicação responsável para atrair atenção sem exagero' },
+];
+const brands = d.brands || ['Feiras', 'Congressos', 'Workshops', 'Lançamentos', 'Comércio local', 'Serviços', 'Networking', 'Empreendedorismo'];
+---
+
+<section class="social-proof">
+  <div class="container">
+    <div class="proof-header animate-on-scroll">
+      <span>Editorias</span>
+      <p>Uma cobertura para divulgar, posicionar, atrair público e gerar oportunidades.</p>
+    </div>
+
+    <div class="proof-stats stagger-children animate-on-scroll">
+      {stats.map((stat) => (
+        <a href="/blog" class="proof-stat">
+          <div class="proof-stat-number">
+            {stat.number}<span class="proof-stat-suffix">{stat.suffix}</span>
+          </div>
+          <div class="proof-stat-label">{stat.label}</div>
+          <div class="proof-stat-detail">{stat.detail}</div>
+        </a>
+      ))}
+    </div>
+
+    <div class="proof-brands animate-on-scroll">
+      <p class="proof-brands-label">Cobertura contínua</p>
+      <div class="proof-brands-list">
+        {brands.map((brand) => (
+          <span class="proof-brand">{brand}</span>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .social-proof {
+    padding: var(--space-4xl) 0;
+    background: #f8fbff;
+    position: relative;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .proof-header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+  }
+
+  .proof-header span {
+    font-family: var(--font-display);
+    font-size: var(--fs-3xl);
+    font-weight: 800;
+  }
+
+  .proof-header p {
+    max-width: 420px;
+    color: var(--color-text-muted);
+    text-align: right;
+  }
+
+  .proof-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--color-border);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .proof-stat {
+    display: flex;
+    flex-direction: column;
+    min-height: 210px;
+    padding: var(--space-xl);
+    background: #fff;
+    color: inherit;
+    transition: background var(--transition-base), transform var(--transition-base);
+    animation: fadeInUp 500ms var(--ease-out-expo) both;
+  }
+
+  .proof-stat:hover {
+    background: var(--color-bg-cool);
+    color: inherit;
+    transform: translateY(-4px);
+  }
+
+  .proof-stat-number {
+    font-family: var(--font-display);
+    font-size: var(--fs-2xl);
+    font-weight: 800;
+    color: var(--color-primary);
+    line-height: 1;
+    margin-bottom: auto;
+  }
+
+  .proof-stat-suffix {
+    font-weight: var(--fw-medium);
+    color: var(--color-primary-light);
+  }
+
+  .proof-stat-label {
+    margin-top: var(--space-xl);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-extrabold);
+    color: var(--color-accent-dark);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wider);
+    margin-bottom: 5px;
+  }
+
+  .proof-stat-detail {
+    font-size: var(--fs-sm);
+    color: var(--color-text-muted);
+    line-height: var(--lh-normal);
+  }
+
+  .proof-brands {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xl);
+  }
+
+  .proof-brands-label {
+    flex-shrink: 0;
+    font-size: var(--fs-xs);
+    color: var(--color-text-faint);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-widest);
+    font-weight: var(--fw-extrabold);
+  }
+
+  .proof-brands-list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .proof-brand {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    color: var(--color-text-secondary);
+    padding: 0.45rem 0.75rem;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg);
+  }
+
+  .proof-brand:nth-child(3n + 1) {
+    border-color: var(--color-primary-lighter);
+    background: var(--color-primary-surface);
+  }
+
+  .proof-brand:nth-child(3n + 2) {
+    border-color: var(--color-accent-light);
+    background: var(--color-accent-surface);
+  }
+
+  .proof-brand:nth-child(3n + 3) {
+    border-color: var(--color-warm-light);
+    background: #fff8db;
+  }
+
+  @media (max-width: 900px) {
+    .proof-stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .proof-header,
+    .proof-brands {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .proof-header p {
+      text-align: left;
+    }
+
+    .proof-stats {
+      grid-template-columns: 1fr;
+    }
+
+    .proof-stat {
+      min-height: 170px;
+    }
+  }
+</style>

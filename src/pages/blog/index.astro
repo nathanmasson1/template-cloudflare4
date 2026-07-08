@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogListing from '../../components/BlogListing.astro';
+import { getBlogListingData } from '../../lib/blogListing';
+
+const legacyCategory = Astro.url.searchParams.get('cat')?.trim().toLowerCase();
+if (legacyCategory) {
+  return new Response(null, {
+    status: 301,
+    headers: { Location: `/blog/${legacyCategory}` },
+  });
+}
+
+const data = await getBlogListingData({ page: 1 });
+const pageTitle = 'Blog';
+const pageDescription = 'Conteudos sobre eventos, negocios, divulgacao, servicos, lancamentos e oportunidades.';
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  image="/images/og-default.svg"
+>
+  <BlogListing
+    categories={data.categories}
+    posts={data.posts}
+    currentPage={data.currentPage}
+    totalPages={data.totalPages}
+    totalPosts={data.totalPosts}
+    basePath="/blog"
+  />
+</BaseLayout>

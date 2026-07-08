@@ -1,0 +1,301 @@
+---
+import PostCard from './PostCard.astro';
+import type { BlogCategory } from '../lib/blogListing';
+
+interface Props {
+  categories: BlogCategory[];
+  posts: any[];
+  selectedCategoryInfo?: BlogCategory;
+  currentPage: number;
+  totalPages: number;
+  totalPosts: number;
+  basePath: string;
+}
+
+const {
+  categories,
+  posts,
+  selectedCategoryInfo,
+  currentPage,
+  totalPages,
+  totalPosts,
+  basePath,
+} = Astro.props;
+
+const pageDescription = selectedCategoryInfo?.description || 'Conteudos sobre eventos, negocios, divulgacao, servicos, lancamentos e oportunidades.';
+const pageHref = (page: number) => page <= 1 ? basePath : `${basePath}/page/${page}`;
+const visiblePages = Array.from({ length: totalPages }, (_, index) => index + 1)
+  .filter((page) => page === 1 || page === totalPages || Math.abs(page - currentPage) <= 2);
+let previousVisiblePage = 0;
+---
+
+<section class="blog-hero">
+  <div class="blog-hero-bg"></div>
+  <div class="container blog-hero-inner">
+    <h1 class="blog-hero-title">
+      {selectedCategoryInfo ? selectedCategoryInfo.name : 'Blog'}
+    </h1>
+    {selectedCategoryInfo && (
+      <p class="section-subtitle" data-blog-description>
+        {pageDescription}
+      </p>
+    )}
+  </div>
+</section>
+
+<section class="blog-posts section">
+  <div class="container">
+    <nav class="category-tabs" aria-label="Filtrar guias por editoria">
+      <a href="/blog" class={`category-tab ${!selectedCategoryInfo ? 'active' : ''}`}>Todas</a>
+      {categories.map((category) => (
+        <a
+          href={`/blog/${category.slug}`}
+          class={`category-tab ${selectedCategoryInfo?.slug === category.slug ? 'active' : ''}`}
+        >
+          {category.name}
+        </a>
+      ))}
+    </nav>
+
+    <div class="blog-grid stagger-children">
+      {posts.map((post) => (
+        <div data-post-card data-post-category={post.data.category}>
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            image={post.data.image}
+            imageAlt={post.data.imageAlt}
+            category={post.data.category}
+            slug={post.id}
+            rating={post.data.rating}
+            badge={post.data.badge}
+            priceRange={post.data.priceRange}
+          />
+        </div>
+      ))}
+    </div>
+
+    <p class="empty-state" hidden={posts.length > 0}>
+      Nenhum guia publicado nesta editoria ainda.
+    </p>
+
+    {totalPages > 1 && (
+      <nav class="blog-pagination" aria-label="Paginacao do blog">
+        <a
+          href={pageHref(currentPage - 1)}
+          class:list={['pagination-link', 'pagination-control', { disabled: currentPage <= 1 }]}
+          aria-disabled={currentPage <= 1 ? 'true' : undefined}
+        >
+          Anterior
+        </a>
+
+        <div class="pagination-pages">
+          {visiblePages.map((page) => {
+            const shouldShowGap = previousVisiblePage > 0 && page - previousVisiblePage > 1;
+            previousVisiblePage = page;
+            return (
+              <>
+                {shouldShowGap && <span class="pagination-gap">...</span>}
+                <a
+                  href={pageHref(page)}
+                  class:list={['pagination-link', { active: page === currentPage }]}
+                  aria-current={page === currentPage ? 'page' : undefined}
+                >
+                  {page}
+                </a>
+              </>
+            );
+          })}
+        </div>
+
+        <a
+          href={pageHref(currentPage + 1)}
+          class:list={['pagination-link', 'pagination-control', { disabled: currentPage >= totalPages }]}
+          aria-disabled={currentPage >= totalPages ? 'true' : undefined}
+        >
+          Proxima
+        </a>
+      </nav>
+    )}
+
+    {totalPosts > 0 && (
+      <p class="pagination-summary">
+        Exibindo {posts.length} de {totalPosts} conteudos.
+      </p>
+    )}
+  </div>
+</section>
+
+<style>
+  .blog-hero {
+    position: relative;
+    padding: calc(var(--navbar-height) + var(--space-4xl)) 0 var(--space-4xl);
+    text-align: center;
+    overflow: hidden;
+    color: #fff;
+  }
+
+  .blog-hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, rgba(2, 8, 23, 0.88), rgba(15, 118, 110, 0.74));
+    z-index: -1;
+  }
+
+  .blog-hero .section-label {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+
+  .blog-hero .section-label::before {
+    background: var(--color-accent);
+  }
+
+  .blog-hero-title {
+    font-family: var(--font-heading);
+    font-size: var(--fs-5xl);
+    font-weight: var(--fw-extrabold);
+    letter-spacing: 0;
+    margin-bottom: var(--space-lg);
+    color: #fff;
+  }
+
+  .blog-hero-accent {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: var(--fw-regular);
+    font-style: italic;
+    color: #fff;
+  }
+
+  .blog-hero .section-subtitle {
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .category-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .category-tab {
+    border: 1px solid rgba(20, 45, 62, 0.16);
+    border-radius: 999px;
+    color: var(--color-text);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    padding: 0.7rem 1rem;
+    text-decoration: none;
+    transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .category-tab:hover,
+  .category-tab.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+  }
+
+  .empty-state {
+    background: var(--color-bg-warm);
+    border: 1px solid rgba(20, 45, 62, 0.12);
+    border-radius: var(--radius-md);
+    color: var(--color-text-muted);
+    font-size: var(--fs-lg);
+    padding: var(--space-xl);
+    text-align: center;
+  }
+
+  .empty-state[hidden] {
+    display: none;
+  }
+
+  .blog-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-top: var(--space-2xl);
+  }
+
+  .pagination-pages {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+
+  .pagination-link,
+  .pagination-gap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.45rem;
+    height: 2.45rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+  }
+
+  .pagination-link {
+    border: 1px solid rgba(20, 45, 62, 0.16);
+    color: var(--color-text);
+    text-decoration: none;
+    transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .pagination-link:hover,
+  .pagination-link.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+  }
+
+  .pagination-control {
+    min-width: 6.5rem;
+    padding: 0 1rem;
+  }
+
+  .pagination-link.disabled {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .pagination-gap {
+    color: var(--color-text-muted);
+  }
+
+  .pagination-summary {
+    margin-top: var(--space-md);
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+    text-align: center;
+  }
+
+  @media (max-width: 1024px) {
+    .blog-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .blog-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .blog-pagination {
+      flex-direction: column;
+    }
+  }
+</style>

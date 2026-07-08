@@ -1,0 +1,80 @@
+Instrucoes para iniciar este projeto em localhost
+
+Projeto: Astro
+Diretorio esperado: raiz deste repositorio
+
+1. Conferir o arquivo .env
+
+O arquivo .env deve existir na raiz do projeto e conter:
+
+ADMIN_SECRET=troque_por_uma_senha_segura
+
+Se a variavel nao existir, adicionar essa linha preservando qualquer outra variavel ja existente.
+
+2. Conferir dependencias
+
+Verificar se existe a pasta node_modules.
+
+Se node_modules nao existir, instalar as dependencias com:
+
+npm install
+
+3. Subir o servidor Astro
+
+Comando principal:
+
+npm run dev -- --host 127.0.0.1 --port 4321
+
+URL local:
+
+http://127.0.0.1:4321/
+
+4. Forma persistente no Windows, quando rodando por agente/IA
+
+Se o processo em primeiro plano for encerrado pelo ambiente do agente, iniciar em segundo plano com:
+
+cmd /c start "Astro Dev" /b "C:\Program Files\nodejs\npm.cmd" run dev -- --host 127.0.0.1 --port 4321 ^> astro-dev.out.log 2^> astro-dev.err.log
+
+Esse comando grava logs em:
+
+astro-dev.out.log
+astro-dev.err.log
+
+5. Confirmar que esta rodando
+
+Testar:
+
+Invoke-WebRequest -UseBasicParsing http://127.0.0.1:4321
+
+Resultado esperado:
+
+StatusCode: 200
+
+Tambem conferir o log:
+
+Get-Content -Tail 80 astro-dev.out.log
+
+O log deve mostrar algo parecido com:
+
+astro v6.x ready
+Local http://127.0.0.1:4321/
+watching for file changes...
+
+6. Se der ERR_CONNECTION_REFUSED
+
+Isso significa que o servidor nao esta rodando ou caiu.
+
+Verificar processos:
+
+Get-Process node
+
+Se nao houver processo node do Astro, iniciar novamente usando o comando persistente do passo 4.
+
+7. Observacoes importantes
+
+- Nao usar outra porta sem avisar o usuario.
+- Preferir 127.0.0.1:4321 para evitar diferencas entre localhost, IPv4 e IPv6.
+- Depois de alterar arquivos, o Astro normalmente atualiza sozinho.
+- Para validar mudancas importantes, rodar:
+
+npm run build

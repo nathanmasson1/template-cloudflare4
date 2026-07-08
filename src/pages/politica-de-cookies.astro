@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { readDataAsync } from '../lib/readData';
+
+const data = await readDataAsync<any>('cookies.json', {});
+const title = data.title || 'Política de Cookies';
+const lastUpdated = data.lastUpdated || '';
+const intro = data.intro || '';
+const sections = Array.isArray(data.content) ? data.content : [];
+---
+
+<BaseLayout title={title} description="Política de Cookies da Credencial Online.">
+  <section class="section legal-simple">
+    <div class="container legal-container">
+      <p class="section-label">Legal</p>
+      <h1 class="section-title">{title}</h1>
+      {lastUpdated && <p class="section-subtitle">Atualizado em {lastUpdated}</p>}
+      {intro && <p class="legal-intro">{intro}</p>}
+      {sections.map((section: any) => (
+        <article class="legal-section">
+          <h2>{section.title}</h2>
+          {(section.paragraphs || []).map((paragraph: string) => <p>{paragraph}</p>)}
+          {Array.isArray(section.items) && section.items.length > 0 && (
+            <ul>{section.items.map((item: string) => <li>{item}</li>)}</ul>
+          )}
+          {section.note && <p class="legal-note">{section.note}</p>}
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-simple { padding-top: calc(var(--navbar-height) + var(--space-4xl)); }
+  .legal-container { max-width: 840px; }
+  .legal-intro, .legal-section p, .legal-section li { color: var(--color-text-secondary); font-size: var(--fs-md); line-height: var(--lh-relaxed); }
+  .legal-intro { margin: var(--space-2xl) 0; padding-bottom: var(--space-2xl); border-bottom: 1px solid var(--color-border-light); }
+  .legal-section { padding: var(--space-2xl) 0; border-bottom: 1px solid var(--color-border-light); }
+  .legal-section h2 { font-size: var(--fs-xl); margin-bottom: var(--space-md); }
+  .legal-section ul { list-style: disc; display: grid; gap: var(--space-sm); padding-left: 1.25rem; margin-top: var(--space-md); }
+  .legal-note { margin-top: var(--space-md); padding: var(--space-md); background: var(--color-bg-warm); border-left: 3px solid var(--color-primary); border-radius: var(--radius-sm); }
+</style>

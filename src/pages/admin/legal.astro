@@ -1,0 +1,12 @@
+---
+export const prerender = false;
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import LegalEditor from '../../components/admin/LegalEditor';
+---
+<AdminLayout title="Políticas e Textos Legais" activeSection="legal">
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold text-slate-900">Políticas e Textos Legais</h1>
+        <p class="text-slate-500 mt-1">Edite privacidade, termos, cookies, políticas editoriais e o aviso das notícias com IA.</p>
+    </div>
+    <LegalEditor client:load />
+</AdminLayout>

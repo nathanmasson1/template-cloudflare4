@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BlogListing from '../../../components/BlogListing.astro';
+import { getBlogListingData } from '../../../lib/blogListing';
+
+const currentPage = Number(Astro.params.page || '1');
+if (!Number.isInteger(currentPage) || currentPage < 1) {
+  return new Response('Pagina nao encontrada', { status: 404 });
+}
+
+const data = await getBlogListingData({ page: currentPage });
+if (currentPage > data.totalPages) {
+  return new Response('Pagina nao encontrada', { status: 404 });
+}
+
+const pageTitle = currentPage > 1 ? `Conteudos - Pagina ${currentPage}` : 'Conteudos';
+const pageDescription = 'Conteudos sobre eventos, negocios, divulgacao, servicos, lancamentos e oportunidades.';
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  image="/images/og-default.svg"
+>
+  <BlogListing
+    categories={data.categories}
+    posts={data.posts}
+    currentPage={data.currentPage}
+    totalPages={data.totalPages}
+    totalPosts={data.totalPosts}
+    basePath="/blog"
+  />
+</BaseLayout>
+

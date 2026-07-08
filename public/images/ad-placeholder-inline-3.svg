@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="970" height="250" viewBox="0 0 970 250" role="img" aria-labelledby="title desc">
+  <title id="title">Placeholder de anuncio dentro do post 3</title>
+  <desc id="desc">Imagem provisoria para terceiro bloco patrocinado dentro do artigo.</desc>
+  <rect width="970" height="250" rx="18" fill="#f0fdf4"/>
+  <rect x="18" y="18" width="934" height="214" rx="16" fill="#fff" stroke="#bbf7d0" stroke-width="2"/>
+  <circle cx="120" cy="125" r="58" fill="#16a34a"/>
+  <path d="M92 126h56M120 98v56" stroke="#fff" stroke-width="10" stroke-linecap="round"/>
+  <text x="205" y="108" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#14532d">Campanha em destaque</text>
+  <text x="205" y="146" font-family="Arial, sans-serif" font-size="17" fill="#15803d">Bloco 3 exibido no ponto escolhido do artigo</text>
+  <rect x="732" y="88" width="160" height="50" rx="25" fill="#16a34a"/>
+  <text x="812" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#fff">Conhecer</text>
+</svg>

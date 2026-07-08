@@ -1,0 +1,50 @@
+{
+  "name": "Exemplo Site",
+  "description": "Portal brasileiro de divulgação de eventos, negócios, marcas locais e oportunidades para quem quer ser visto com profissionalismo.",
+  "url": "https://www.exemplo.com.br",
+  "author": "Redação {siteName}",
+  "language": "pt-BR",
+  "logo": "/images/logo-placeholder.svg",
+  "footerLogo": "/images/logo-placeholder-light.svg",
+  "favicon": "/favicon.svg",
+  "logoMark": "CO",
+  "navbarTopText": "Agenda e negócios",
+  "ctaText": "Entrar em contato",
+  "ctaHref": "/contato",
+  "theme": {
+    "primary": "#7030df",
+    "accent": "#9677f3",
+    "font": "inter",
+    "dark": "#2D1060"
+  },
+  "social": {
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "pinterest": "",
+    "youtube": ""
+  },
+  "contact": {
+    "email": "contato@exemplo.com.br",
+    "phone": "",
+    "address": "Brasil",
+    "name": "Redação {siteName}"
+  },
+  "legal": {
+    "terms_last_updated": "27 de junho de 2026",
+    "privacy_last_updated": "27 de junho de 2026"
+  },
+  "phone": "",
+  "address": "Brasil",
+  "ai": {
+    "openaiKey": ""
+  },
+  "footer": {
+    "copyright": "© {year} {siteName}. Todos os direitos reservados.",
+    "description": "Divulgação clara para eventos, negócios, lançamentos, serviços e iniciativas locais."
+  },
+  "seo": {
+    "title": "Exemplo Site (SEO)",
+    "description": "Exemplo Site conecta eventos e negócios ao público certo com conteúdo editorial, vitrines de divulgação e orientação prática para marcas que querem crescer. (SEO)"
+  }
+}

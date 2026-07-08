@@ -1,0 +1,30 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Divulgação de eventos e negócios</title>
+  <desc id="desc">Mesa editorial com calendário, credenciais, cartões de negócios e painel de divulgação.</desc>
+  <rect width="1600" height="1000" fill="#F8FBFF"/>
+  <rect x="80" y="90" width="1440" height="820" rx="42" fill="#E0F2FE"/>
+  <rect x="136" y="154" width="520" height="668" rx="30" fill="#FFFFFF"/>
+  <rect x="188" y="220" width="168" height="46" rx="14" fill="#075985"/>
+  <rect x="188" y="302" width="390" height="34" rx="12" fill="#CBD5E1"/>
+  <rect x="188" y="370" width="318" height="34" rx="12" fill="#CBD5E1"/>
+  <rect x="188" y="438" width="260" height="34" rx="12" fill="#CBD5E1"/>
+  <rect x="188" y="548" width="390" height="150" rx="24" fill="#FFFBEB"/>
+  <circle cx="250" cy="623" r="34" fill="#F59E0B"/>
+  <path d="M324 604h174M324 646h122" stroke="#0F172A" stroke-width="22" stroke-linecap="round"/>
+  <rect x="730" y="154" width="548" height="290" rx="34" fill="#0F172A"/>
+  <rect x="786" y="210" width="132" height="184" rx="22" fill="#FFFFFF"/>
+  <rect x="822" y="190" width="60" height="34" rx="17" fill="#F59E0B"/>
+  <circle cx="852" cy="280" r="22" fill="#16A34A"/>
+  <path d="M818 336h68M818 364h88" stroke="#075985" stroke-width="12" stroke-linecap="round"/>
+  <rect x="976" y="220" width="216" height="38" rx="14" fill="#38BDF8"/>
+  <rect x="976" y="292" width="244" height="38" rx="14" fill="#FCD34D"/>
+  <rect x="976" y="364" width="176" height="38" rx="14" fill="#86EFAC"/>
+  <rect x="730" y="508" width="700" height="314" rx="34" fill="#FFFFFF"/>
+  <rect x="790" y="568" width="96" height="96" rx="20" fill="#E0F2FE"/>
+  <rect x="928" y="568" width="96" height="96" rx="20" fill="#FFFBEB"/>
+  <rect x="1066" y="568" width="96" height="96" rx="20" fill="#DCFCE7"/>
+  <rect x="1204" y="568" width="96" height="96" rx="20" fill="#EDE9FE"/>
+  <path d="M808 715h472M808 760h312" stroke="#334155" stroke-width="24" stroke-linecap="round"/>
+  <circle cx="1420" cy="210" r="72" fill="#F59E0B"/>
+  <path d="M1386 210h68M1420 176v68" stroke="#0F172A" stroke-width="16" stroke-linecap="round"/>
+</svg>

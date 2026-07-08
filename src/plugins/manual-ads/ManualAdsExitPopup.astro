@@ -1,0 +1,155 @@
+---
+import { readDataAsync } from '../../lib/readData';
+import { mergeManualAdsConfig } from './config';
+
+const pluginsConfig = await readDataAsync<any>('pluginsConfig.json', {});
+const manualAds = mergeManualAdsConfig(pluginsConfig.manualAds);
+const ad = manualAds.exitPopup || {};
+const enabled = manualAds.enabled !== false && ad.enabled !== false && ad.image && ad.url;
+---
+
+{enabled && (
+  <div class="manual-exit-popup" data-manual-exit-popup hidden>
+    <div class="manual-exit-popup-backdrop" data-manual-exit-close></div>
+    <section class="manual-exit-popup-card" aria-label="Publicidade">
+      <button class="manual-exit-popup-close" type="button" aria-label="Fechar anuncio" data-manual-exit-close>×</button>
+      <p class="manual-exit-popup-label">Publicidade</p>
+      <a href={ad.url} target="_blank" rel="sponsored noopener noreferrer" class="manual-exit-popup-link">
+        <img src={ad.image} alt={ad.alt || 'Anuncio'} loading="lazy" />
+      </a>
+    </section>
+  </div>
+)}
+
+{enabled && (
+  <script>
+    (() => {
+      const root = document.querySelector('[data-manual-exit-popup]');
+      if (!root) return;
+      const storageKey = 'manual_exit_popup_seen';
+      let shown = sessionStorage.getItem(storageKey) === '1';
+      let maxScrollY = 0;
+
+      const show = () => {
+        if (shown) return;
+        shown = true;
+        sessionStorage.setItem(storageKey, '1');
+        root.removeAttribute('hidden');
+        document.documentElement.classList.add('manual-exit-popup-open');
+      };
+
+      const hide = () => {
+        root.setAttribute('hidden', '');
+        document.documentElement.classList.remove('manual-exit-popup-open');
+      };
+
+      document.querySelectorAll('[data-manual-exit-close]').forEach((button) => {
+        button.addEventListener('click', hide);
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') hide();
+      });
+
+      document.addEventListener('mouseleave', (event) => {
+        if (event.clientY <= 0 && window.innerWidth >= 900) show();
+      });
+
+      window.addEventListener('scroll', () => {
+        const currentY = window.scrollY || 0;
+        maxScrollY = Math.max(maxScrollY, currentY);
+        const mobile = window.innerWidth < 900;
+        const returningUp = maxScrollY > 500 && currentY < maxScrollY - 260;
+        if (mobile && returningUp) show();
+      }, { passive: true });
+
+      window.setTimeout(() => {
+        if (window.innerWidth < 900 && window.scrollY > 240) show();
+      }, 12000);
+    })();
+  </script>
+)}
+
+<style>
+  :global(.manual-exit-popup-open) {
+    overflow: hidden;
+  }
+
+  .manual-exit-popup[hidden] {
+    display: none;
+  }
+
+  .manual-exit-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+  }
+
+  .manual-exit-popup-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.66);
+    backdrop-filter: blur(4px);
+  }
+
+  .manual-exit-popup-card {
+    position: relative;
+    z-index: 1;
+    width: min(720px, 94vw);
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 24px 80px rgba(15, 23, 42, 0.32);
+    overflow: hidden;
+  }
+
+  .manual-exit-popup-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 2;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.78);
+    color: #fff;
+    font-size: 1.35rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .manual-exit-popup-label {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    z-index: 2;
+    margin: 0;
+    padding: 0.35rem 0.55rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.88);
+    color: #475569;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .manual-exit-popup-link,
+  .manual-exit-popup img {
+    display: block;
+    width: 100%;
+  }
+
+  .manual-exit-popup img {
+    height: auto;
+  }
+
+  @media (max-width: 640px) {
+    .manual-exit-popup-card {
+      border-radius: 18px;
+    }
+  }
+</style>

@@ -1,0 +1,12 @@
+---
+export const prerender = false;
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import BackupManager from '../../plugins/backup/BackupManager';
+---
+<AdminLayout title="Backup e Restore" activeSection="backup">
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold text-slate-900">Backup e Restore</h1>
+    <p class="text-slate-500 mt-1">Baixe e restaure configurações, posts e imagens em partes seguras.</p>
+  </div>
+  <BackupManager client:load />
+</AdminLayout>

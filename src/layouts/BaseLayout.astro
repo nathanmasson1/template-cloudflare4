@@ -1,0 +1,270 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import BodyEndPlugins from '../plugins/_slots/BodyEndPlugins.astro';
+import { readDataAsync } from '../lib/readData';
+
+interface Breadcrumb {
+  name: string;
+  url: string;
+}
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonicalURL?: string;
+  type?: 'website' | 'article';
+  pubDate?: Date;
+  updatedDate?: Date;
+  author?: string;
+  rating?: number;
+  breadcrumbs?: Breadcrumb[];
+}
+
+const {
+  title,
+  description,
+  image = '/images/credencial-hero.svg',
+  canonicalURL: canonicalURLProp,
+  type = 'website',
+  pubDate,
+  updatedDate,
+  author,
+  rating,
+  breadcrumbs = [],
+} = Astro.props;
+
+const site = await readDataAsync('siteConfig.json') || {};
+const siteName = site.name || 'Credencial Online';
+const defaultSeoTitle = site.seo?.title || siteName;
+const defaultSeoDescription = site.seo?.description || site.description || 'Conteudos, noticias e informacoes atualizadas.';
+const siteUrl = (site.url || Astro.site?.toString() || Astro.url.origin).replace(/\/$/, '');
+
+const defaultTheme = {
+  primary: '#075985',
+  accent: '#f59e0b',
+  dark: '#111827',
+};
+
+function normalizeHexColor(value: unknown, fallback: string) {
+  if (typeof value !== 'string') return fallback;
+  const color = value.trim();
+  if (/^#[0-9a-fA-F]{3}$/.test(color)) {
+    const [, r, g, b] = color;
+    return `#${r}${r}${g}${g}${b}${b}`.toLowerCase();
+  }
+  if (/^#[0-9a-fA-F]{6}$/.test(color)) {
+    return color.toLowerCase();
+  }
+  return fallback;
+}
+
+function hexToRgb(hex: string) {
+  const clean = hex.replace('#', '');
+  return {
+    r: Number.parseInt(clean.slice(0, 2), 16),
+    g: Number.parseInt(clean.slice(2, 4), 16),
+    b: Number.parseInt(clean.slice(4, 6), 16),
+  };
+}
+
+function componentToHex(value: number) {
+  return Math.max(0, Math.min(255, Math.round(value))).toString(16).padStart(2, '0');
+}
+
+function rgbToHex(r: number, g: number, b: number) {
+  return `#${componentToHex(r)}${componentToHex(g)}${componentToHex(b)}`;
+}
+
+function mixHex(base: string, target: string, amount: number) {
+  const a = hexToRgb(base);
+  const b = hexToRgb(target);
+  return rgbToHex(
+    a.r + (b.r - a.r) * amount,
+    a.g + (b.g - a.g) * amount,
+    a.b + (b.b - a.b) * amount
+  );
+}
+
+function hexToRgba(hex: string, alpha: number) {
+  const rgb = hexToRgb(hex);
+  return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+}
+
+const themePrimary = normalizeHexColor(site.theme?.primary, defaultTheme.primary);
+const themeAccent = normalizeHexColor(site.theme?.accent, defaultTheme.accent);
+const themeDark = normalizeHexColor(site.theme?.dark, defaultTheme.dark);
+const themeStyle = `
+  :root:root {
+    --color-primary: ${themePrimary};
+    --color-primary-medium: ${mixHex(themePrimary, '#000000', 0.12)};
+    --color-primary-light: ${mixHex(themePrimary, '#ffffff', 0.34)};
+    --color-primary-lighter: ${mixHex(themePrimary, '#ffffff', 0.72)};
+    --color-primary-surface: ${mixHex(themePrimary, '#ffffff', 0.9)};
+    --color-primary-glow: ${hexToRgba(themePrimary, 0.16)};
+    --color-accent: ${themeAccent};
+    --color-accent-light: ${mixHex(themeAccent, '#ffffff', 0.58)};
+    --color-accent-surface: ${mixHex(themeAccent, '#ffffff', 0.9)};
+    --color-accent-dark: ${themeDark};
+    --color-bg-cool: ${mixHex(themePrimary, '#ffffff', 0.9)};
+    --color-bg-dark: ${themeDark};
+  }
+`;
+
+function withSiteName(value: string | undefined, fallback: string) {
+  return (value || fallback)
+    .replace(/\{siteName\}/g, siteName)
+    .replace(/Credencial Online/g, siteName);
+}
+
+function withoutTrailingSlash(url: string) {
+  const parsed = new URL(url);
+  if (parsed.pathname === '/') {
+    return parsed.origin;
+  }
+  if (parsed.pathname !== '/') {
+    parsed.pathname = parsed.pathname.replace(/\/+$/, '');
+  }
+  return parsed.toString();
+}
+
+const canonicalURL = withoutTrailingSlash(canonicalURLProp || new URL(Astro.url.pathname, `${siteUrl}/`).toString());
+const pageAuthor = author || withSiteName(site.author, site.contact?.name || siteName);
+const pageTitle = title || defaultSeoTitle;
+const pageDescription = description || defaultSeoDescription;
+const fullTitle = pageTitle === 'Home' || type === 'article'
+  ? (pageTitle === 'Home' ? defaultSeoTitle : pageTitle)
+  : `${pageTitle} | ${siteName}`;
+
+// Build JSON-LD
+const mainSchema: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': type === 'article' ? 'BlogPosting' : 'WebSite',
+  name: fullTitle,
+  headline: pageTitle === 'Home' ? defaultSeoTitle : pageTitle,
+  description: pageDescription,
+  url: canonicalURL,
+  publisher: {
+    '@type': 'Organization',
+    name: siteName,
+    url: siteUrl,
+    description: site.description || defaultSeoDescription,
+  },
+};
+
+if (type === 'article') {
+  if (pubDate) mainSchema.datePublished = pubDate.toISOString();
+  if (updatedDate) mainSchema.dateModified = updatedDate.toISOString();
+  if (image) mainSchema.image = new URL(image, `${siteUrl}/`).toString();
+  mainSchema.author = { '@type': 'Person', name: pageAuthor };
+  mainSchema.mainEntityOfPage = { '@type': 'WebPage', '@id': canonicalURL };
+
+  if (rating) {
+    mainSchema.review = {
+      '@type': 'Review',
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: rating,
+        bestRating: 10,
+      },
+      author: { '@type': 'Person', name: pageAuthor },
+    };
+  }
+}
+
+// Breadcrumb schema
+const breadcrumbSchema = breadcrumbs.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbs.map((crumb, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: crumb.name,
+    item: new URL(crumb.url, `${siteUrl}/`).toString(),
+  })),
+} : null;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <style is:inline data-credencial-theme set:html={themeStyle}></style>
+
+    <!-- Primary Meta Tags -->
+    <title>{fullTitle}</title>
+    <meta name="title" content={fullTitle} />
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonicalURL} />
+    {pageAuthor && <meta name="author" content={pageAuthor} />}
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={new URL(image, `${siteUrl}/`)} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content="pt_BR" />
+    {pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
+    {updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}
+    {pageAuthor && <meta property="article:author" content={pageAuthor} />}
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={new URL(image, `${siteUrl}/`)} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- RSS -->
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={siteName}
+      href={new URL('/rss.xml', `${siteUrl}/`)}
+    />
+
+    <!-- JSON-LD: Main Schema -->
+    <script type="application/ld+json" set:html={JSON.stringify(mainSchema)} />
+
+    <!-- JSON-LD: Breadcrumbs -->
+    {breadcrumbSchema && (
+      <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    )}
+  </head>
+  <body class="grain">
+    <Navbar />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <BodyEndPlugins />
+
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+      );
+
+      document.querySelectorAll('.animate-on-scroll, .stagger-children').forEach((el) => {
+        observer.observe(el);
+      });
+    </script>
+  </body>
+</html>

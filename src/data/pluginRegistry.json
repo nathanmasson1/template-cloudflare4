@@ -1,0 +1,137 @@
+[
+  {
+    "name": "google-tag",
+    "label": "Google Tag",
+    "description": "Configure todas as tags do Google (Analytics, Ads, Tag Manager) em um so lugar.",
+    "icon": "Tag",
+    "color": "text-blue-600",
+    "bg": "bg-blue-50",
+    "href": "/admin/google-tag"
+  },
+  {
+    "name": "meta-pixel",
+    "label": "Meta Pixel",
+    "description": "Rastreie conversões e audiência com o Facebook/Meta Pixel.",
+    "icon": "Target",
+    "color": "text-blue-600",
+    "bg": "bg-blue-50",
+    "href": "/admin/meta-pixel"
+  },
+  {
+    "name": "adsense",
+    "label": "Google AdSense",
+    "description": "Monetize seu blog com anúncios automáticos do Google AdSense.",
+    "icon": "DollarSign",
+    "color": "text-yellow-600",
+    "bg": "bg-yellow-50",
+    "href": "/admin/adsense"
+  },
+  {
+    "name": "manual-ads",
+    "label": "Anuncios Manuais",
+    "description": "Insira banners manuais na lateral, dentro dos posts e em exit popup com imagens e links patrocinados.",
+    "icon": "Megaphone",
+    "color": "text-rose-600",
+    "bg": "bg-rose-50",
+    "href": "/admin/manual-ads"
+  },
+  {
+    "name": "social-share",
+    "label": "Compartilhamento Social",
+    "description": "Adicione botões de share nos artigos para Facebook, WhatsApp e mais.",
+    "icon": "Share2",
+    "color": "text-pink-600",
+    "bg": "bg-pink-50",
+    "href": "/admin/social-share"
+  },
+  {
+    "name": "seo",
+    "label": "SEO Toolkit",
+    "description": "Gere JSON-LD structured data e veja o score de SEO de cada artigo.",
+    "icon": "SearchCheck",
+    "color": "text-emerald-600",
+    "bg": "bg-emerald-50",
+    "href": "/admin/seo"
+  },
+  {
+    "name": "llms-txt",
+    "label": "LLMs.txt",
+    "description": "Gere o arquivo /llms.txt para ajudar IAs a entenderem o conteudo principal do site.",
+    "icon": "Globe",
+    "color": "text-cyan-600",
+    "bg": "bg-cyan-50",
+    "href": "/admin/llms-txt"
+  },
+  {
+    "name": "feeds-robots",
+    "label": "RSS e Robots",
+    "description": "Configure o feed /rss.xml e o arquivo /robots.txt usados por leitores, buscadores e IAs.",
+    "icon": "Rss",
+    "color": "text-orange-600",
+    "bg": "bg-orange-50",
+    "href": "/admin/feeds-robots"
+  },
+  {
+    "name": "related-posts",
+    "label": "Posts relacionados",
+    "description": "Exibe posts relacionados por categoria ao final de cada artigo.",
+    "icon": "BookOpen",
+    "color": "text-indigo-600",
+    "bg": "bg-indigo-50",
+    "href": "/admin/related-posts"
+  },
+  {
+    "name": "cookie-consent",
+    "label": "Cookie Consent / LGPD",
+    "description": "Exiba o banner de cookies e bloqueie GA/Pixel até o consentimento.",
+    "icon": "Cookie",
+    "color": "text-amber-600",
+    "bg": "bg-amber-50",
+    "href": "/admin/cookie-consent"
+  },
+  {
+    "name": "redirects",
+    "label": "Gerenciar Redirects",
+    "description": "Crie redirects 301/302 para migração de URLs e campanhas.",
+    "icon": "ArrowRightLeft",
+    "color": "text-indigo-600",
+    "bg": "bg-indigo-50",
+    "href": "/admin/redirects"
+  },
+  {
+    "name": "ai-generator",
+    "label": "Gerar Posts com IA",
+    "description": "Crie artigos completos com inteligência artificial e imagens automáticas.",
+    "icon": "Sparkles",
+    "color": "text-violet-600",
+    "bg": "bg-violet-50",
+    "href": "/admin/ai"
+  },
+  {
+    "name": "search-console",
+    "label": "Search Console",
+    "description": "Conecte o Google Search Console e veja o desempenho do seu site.",
+    "icon": "Search",
+    "color": "text-green-600",
+    "bg": "bg-green-50",
+    "href": "/admin/search-console"
+  },
+  {
+    "name": "backup-restore",
+    "label": "Backup e Restore",
+    "description": "Exporte e restaure configurações, posts e imagens em partes seguras para Cloudflare D1/R2.",
+    "icon": "Download",
+    "color": "text-sky-600",
+    "bg": "bg-sky-50",
+    "href": "/admin/backup"
+  },
+  {
+    "name": "wp-importer",
+    "label": "Importar WordPress",
+    "description": "Migre todos os posts do WordPress para o Walker em um clique.",
+    "icon": "Upload",
+    "color": "text-slate-600",
+    "bg": "bg-slate-100",
+    "href": "/admin/import-wp"
+  }
+]

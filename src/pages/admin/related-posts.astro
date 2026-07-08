@@ -1,0 +1,12 @@
+---
+export const prerender = false;
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import SettingsRelatedPosts from '../../plugins/related-posts/SettingsRelatedPosts';
+---
+<AdminLayout title="Posts Relacionados" activeSection="related-posts">
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold text-slate-900">Posts Relacionados</h1>
+        <p class="text-slate-500 mt-1">Configure a exibição de artigos relacionados ao final dos posts.</p>
+    </div>
+    <SettingsRelatedPosts client:load />
+</AdminLayout>

@@ -1,0 +1,311 @@
+---
+import { readDataAsync } from '../lib/readData';
+
+const site = await readDataAsync('siteConfig.json') || {};
+const footer = await readDataAsync('footer.json') || {};
+const categories = await readDataAsync<Array<{ name: string; slug: string; description?: string }>>('categories.json', []);
+
+const currentYear = new Date().getFullYear();
+
+const siteName = site.name || 'Credencial Online';
+const siteUrl = site.url || 'https://www.credencialonline.com.br/';
+const siteDomain = siteUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
+const siteLogo = site.logo || '';
+const footerLogo = site.footerLogo || site.logoFooter || siteLogo;
+const logoMark = (site.logoMark || 'TT').toUpperCase();
+
+const about = footer.about || site.footer?.description || site.description || '';
+const social = footer.social || [];
+const columns = footer.columns || [];
+const categoryColumn = footer.categoryColumn || {};
+const categoryLinks = categories
+  .filter((category: any) => category?.slug && category?.name)
+  .map((category: any) => ({
+    href: `/blog/${category.slug}`,
+    label: category.name,
+  }));
+const displayColumns = [
+  ...columns,
+  ...(categoryColumn.enabled === false || categoryLinks.length === 0
+    ? []
+    : [{ heading: categoryColumn.heading || 'Categorias', links: categoryLinks }]),
+];
+const rawCopyrightTemplate = site.footer?.copyright || footer.copyright || '';
+const copyrightTemplate = rawCopyrightTemplate.trim() === '@2026'
+  ? `© {year} {siteName}. Todos os direitos reservados.`
+  : rawCopyrightTemplate || `© {year} {siteName}. Todos os direitos reservados.`;
+const copyright = copyrightTemplate
+  .replace(/\{year\}/g, String(currentYear))
+  .replace(/\{siteName\}/g, siteName)
+  .replace(/Credencial Online/g, siteName);
+const disclaimer = footer.disclaimer || '';
+---
+
+<footer class="footer footer-news" id="contato">
+  <div class="footer-main">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="footer-logo">
+            {footerLogo ? (
+              <img src={footerLogo} alt={siteName} class="footer-logo-image" />
+            ) : (
+              <>
+                <span class="footer-logo-mark">{logoMark}</span>
+                <span class="footer-logo-text">{siteName}</span>
+              </>
+            )}
+          </a>
+          <p class="footer-domain">{siteDomain}</p>
+          <p class="footer-about">{about}</p>
+          <div class="footer-social">
+            {social.map((s: any) => (
+              <a
+                href={s.href}
+                class="footer-social-link"
+                aria-label={s.label}
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+                set:html={s.icon}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div class="footer-link-field">
+          {displayColumns.map((col: any) => (
+            <nav class="footer-col" aria-label={col.heading}>
+              <p class="footer-heading">{col.heading}</p>
+              <ul class="footer-links">
+                {(col.links || []).map((link: any) => (
+                  <li>
+                    <a href={link.href} class="footer-link">{link.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <p class="footer-copy">{copyright}</p>
+      <p class="footer-disclaimer">{disclaimer}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-news {
+    color: #f4f7fb;
+    position: relative;
+    overflow: hidden;
+    background: var(--color-bg-dark);
+  }
+
+  .footer-news::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.08;
+    background-image:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.16) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(255, 255, 255, 0.16) 1px, transparent 1px);
+    background-size: 44px 44px;
+    pointer-events: none;
+  }
+
+  .footer-news .footer-main {
+    position: relative;
+    z-index: 1;
+    padding: var(--space-3xl) 0;
+  }
+
+  .footer-news .footer-grid {
+    display: grid;
+    grid-template-columns: minmax(280px, 440px) minmax(420px, 1fr);
+    gap: var(--space-3xl);
+    align-items: start;
+  }
+
+  .footer-news .footer-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+    margin-bottom: var(--space-md);
+  }
+
+  .footer-news .footer-logo-mark {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent-dark));
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 0.86rem;
+    font-weight: 900;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-sm);
+    box-shadow: 6px 6px 0 var(--color-accent);
+  }
+
+  .footer-news .footer-logo-text {
+    font-family: var(--font-display);
+    font-size: var(--fs-2xl);
+    font-weight: 800;
+    color: #fff;
+  }
+
+  .footer-news .footer-logo-image {
+    height: 54px;
+    max-width: min(320px, 72vw);
+    width: auto;
+  }
+
+  .footer-news .footer-domain {
+    display: inline-flex;
+    margin-bottom: var(--space-md);
+    padding: 0.35rem 0.8rem;
+    color: #fff2a8;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    letter-spacing: var(--ls-wide);
+  }
+
+  .footer-news .footer-about {
+    max-width: 430px;
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+    color: rgba(244, 247, 251, 0.74);
+    margin-bottom: var(--space-lg);
+  }
+
+  .footer-news .footer-social {
+    display: flex;
+    gap: var(--space-sm);
+  }
+
+  .footer-news .footer-social-link {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.68);
+    transition: all var(--transition-base);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .footer-news .footer-social-link:hover {
+    background: var(--color-primary);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  .footer-news .footer-link-field {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-xl);
+    padding: var(--space-xl);
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+  }
+
+  .footer-news .footer-heading {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-extrabold);
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: var(--space-md);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-widest);
+  }
+
+  .footer-news .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .footer-news .footer-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--fs-sm);
+    color: rgba(244, 247, 251, 0.78);
+    transition: color var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .footer-news .footer-link::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    opacity: 0.85;
+  }
+
+  .footer-news .footer-link:hover {
+    color: #fff;
+    transform: translateX(3px);
+  }
+
+  .footer-news .footer-bottom {
+    position: relative;
+    z-index: 1;
+    padding: var(--space-lg) 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .footer-news .footer-bottom-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-xl);
+  }
+
+  .footer-news .footer-copy,
+  .footer-news .footer-disclaimer {
+    font-size: var(--fs-xs);
+    color: rgba(255, 255, 255, 0.46);
+  }
+
+  .footer-news .footer-disclaimer {
+    max-width: 520px;
+    text-align: right;
+    line-height: var(--lh-normal);
+  }
+
+  @media (max-width: 900px) {
+    .footer-news .footer-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-2xl);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .footer-news .footer-link-field {
+      grid-template-columns: 1fr;
+      padding: var(--space-lg);
+    }
+
+    .footer-news .footer-bottom-inner {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .footer-news .footer-disclaimer {
+      text-align: center;
+      max-width: 100%;
+    }
+  }
+</style>

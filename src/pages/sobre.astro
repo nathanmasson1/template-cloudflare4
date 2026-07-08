@@ -1,0 +1,257 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { readDataAsync } from '../lib/readData';
+
+const sobre = await readDataAsync('sobre.json') || {};
+const seo = sobre.seo || {};
+const hero = sobre.hero || {};
+const mission = sobre.mission || {};
+const cta = sobre.cta || {};
+const heroParagraphs = hero.paragraphs || [];
+const stats = hero.stats || [];
+const missionItems = mission.items || [];
+const values = sobre.values || [];
+---
+
+<BaseLayout
+  title={seo.title || 'Sobre'}
+  description={seo.description || 'Conheça a Credencial Online, portal brasileiro de divulgação de eventos e negócios.'}
+  image={seo.image || undefined}
+>
+  <section class="about-hero">
+    <div class="about-hero-bg"></div>
+    <div class="container about-hero-inner">
+      <span class="section-label">{hero.label || 'Sobre'}</span>
+      <h1 class="about-hero-title">
+        {hero.title || 'Finanças pessoais'}
+        <span class="about-hero-accent">{hero.titleAccent || 'com informação para decidir melhor'}</span>
+      </h1>
+      <div class="about-hero-copy">
+        {heroParagraphs.map((paragraph: string) => <p>{paragraph}</p>)}
+      </div>
+      <div class="about-stats">
+        {stats.map((stat: any) => (
+          <div class="about-stat">
+            <strong>{stat.number}</strong>
+            <span>{stat.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="about-mission section">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-label">{mission.label || 'Nossa missão'}</span>
+        <h2 class="section-title">{mission.title || 'Informar sem complicar'}</h2>
+        <p class="section-subtitle">{mission.subtitle}</p>
+      </div>
+      <div class="mission-grid stagger-children animate-on-scroll">
+        {missionItems.map((item: any) => (
+          <article class="mission-card">
+            <span>{item.number}</span>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="about-values section">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-label">Nossos valores</span>
+        <h2 class="section-title">Como tratamos escolhas de produto</h2>
+      </div>
+      <div class="values-grid stagger-children animate-on-scroll">
+        {values.map((value: any) => (
+          <article class="value-card">
+            <h3>{value.title}</h3>
+            <p>{value.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="about-cta section">
+    <div class="container about-cta-inner animate-on-scroll">
+      <h2>{cta.title || 'Tem uma sugestão de pauta?'}</h2>
+      <p>{cta.text}</p>
+      <div class="about-cta-actions">
+        <a href={(cta.ctaPrimary && cta.ctaPrimary.href) || '/contato'} class="btn btn-primary">
+          {(cta.ctaPrimary && cta.ctaPrimary.text) || 'Enviar dúvida'}
+        </a>
+        <a href={(cta.ctaSecondary && cta.ctaSecondary.href) || '/blog'} class="btn btn-outline">
+          {(cta.ctaSecondary && cta.ctaSecondary.text) || 'Ler artigos'}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-hero {
+    position: relative;
+    padding: calc(var(--navbar-height) + var(--space-4xl)) 0 var(--space-4xl);
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .about-hero-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--color-bg-warm), var(--color-bg-cool));
+    z-index: -1;
+  }
+
+  .about-hero-title {
+    font-family: var(--font-heading);
+    font-size: var(--fs-5xl);
+    font-weight: var(--fw-extrabold);
+    line-height: var(--lh-tight);
+    margin-bottom: var(--space-xl);
+  }
+
+  .about-hero-accent {
+    display: block;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: var(--fw-regular);
+    color: var(--color-primary);
+  }
+
+  .about-hero-copy {
+    max-width: 760px;
+    margin: 0 auto var(--space-2xl);
+    color: var(--color-text-secondary);
+    font-size: var(--fs-md);
+    line-height: var(--lh-relaxed);
+  }
+
+  .about-hero-copy p + p {
+    margin-top: var(--space-md);
+  }
+
+  .about-stats,
+  .mission-grid,
+  .values-grid {
+    display: grid;
+    gap: var(--space-lg);
+  }
+
+  .about-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .about-stat,
+  .mission-card,
+  .value-card {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .about-stat strong {
+    display: block;
+    color: var(--color-primary);
+    font-family: var(--font-display);
+    font-size: var(--fs-2xl);
+    line-height: 1;
+    margin-bottom: var(--space-sm);
+  }
+
+  .about-stat span {
+    color: var(--color-text-muted);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-extrabold);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+  }
+
+  .about-mission {
+    background: var(--color-bg);
+  }
+
+  .mission-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .mission-card span {
+    color: var(--color-accent-dark);
+    background: var(--color-accent-surface);
+    border: 1px solid var(--color-accent-light);
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-extrabold);
+    margin-bottom: var(--space-md);
+    padding: 0.25rem 0.55rem;
+  }
+
+  .mission-card h3,
+  .value-card h3 {
+    font-size: var(--fs-lg);
+    margin-bottom: var(--space-sm);
+  }
+
+  .mission-card p,
+  .value-card p,
+  .about-cta-inner p {
+    color: var(--color-text-muted);
+    line-height: var(--lh-relaxed);
+  }
+
+  .about-values,
+  .about-cta {
+    background: #fff;
+  }
+
+  .values-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .value-card {
+    border-top: 4px solid var(--color-primary);
+  }
+
+  .about-cta-inner {
+    max-width: 680px;
+    text-align: center;
+  }
+
+  .about-cta-inner h2 {
+    font-family: var(--font-heading);
+    font-size: var(--fs-3xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .about-cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-top: var(--space-xl);
+  }
+
+  @media (max-width: 900px) {
+    .mission-grid,
+    .values-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .about-stats,
+    .mission-grid,
+    .values-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

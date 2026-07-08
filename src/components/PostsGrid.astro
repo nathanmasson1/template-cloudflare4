@@ -1,0 +1,101 @@
+---
+import { getCollection } from 'astro:content';
+import PostCard from './PostCard.astro';
+import { isPostPublic } from '../lib/postVisibility';
+import { getPostsDb, getPublishedPostsFromD1 } from '../lib/cloudflareContent';
+
+interface Props {
+  data?: any;
+  limit?: number;
+}
+
+const d = Astro.props.data || {};
+const limit = d.limit || Astro.props.limit || 6;
+const title = d.title || 'Guias recentes';
+const subtitle = d.subtitle || 'Confira ideias para divulgar eventos, negócios, serviços e oportunidades com mais clareza.';
+const ctaText = d.ctaText || 'Ver todos os conteúdos';
+const ctaHref = d.ctaHref || '/blog';
+const staticPosts = (await getCollection('blog', ({ data }) => isPostPublic(data)))
+  .map((post) => ({ id: post.id, data: post.data }));
+
+const db = getPostsDb();
+const d1Posts = db ? await getPublishedPostsFromD1(db, { limit: 100 }) : [];
+const d1Slugs = new Set(d1Posts.map((post) => post.id));
+const posts = [...d1Posts, ...staticPosts.filter((post) => !d1Slugs.has(post.id))]
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, limit);
+---
+
+<section class="posts-section section" id="posts">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <h1 class="section-title">{title}</h1>
+      <p class="section-subtitle">{subtitle}</p>
+    </div>
+
+    <div class="posts-grid stagger-children animate-on-scroll">
+      {posts.map((post) => (
+        <PostCard
+          title={post.data.title}
+          description={post.data.description}
+          pubDate={post.data.pubDate}
+          image={post.data.image}
+          imageAlt={post.data.imageAlt}
+          category={post.data.category}
+          slug={post.id}
+          rating={post.data.rating}
+          badge={post.data.badge}
+          priceRange={post.data.priceRange}
+        />
+      ))}
+    </div>
+
+    <div class="posts-cta animate-on-scroll">
+      <div class="divider">
+        <div class="divider-icon"></div>
+      </div>
+      <a href={ctaHref} class="btn btn-outline">
+        {ctaText}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .posts-section {
+    background: linear-gradient(180deg, var(--color-bg) 0%, #fff 100%);
+  }
+
+  .posts-section :global(.section-header) {
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .posts-cta {
+    text-align: center;
+  }
+
+  @media (max-width: 1024px) {
+    .posts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .posts-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+  }
+</style>
