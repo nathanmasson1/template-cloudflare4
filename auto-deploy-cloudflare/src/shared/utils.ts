@@ -13,6 +13,7 @@ export const REQUIRED_TEMPLATE_PATHS = [
   { path: "migrations", type: "dir" },
   { path: "scripts/export-posts-d1-sql.mjs", type: "file" },
   { path: "scripts/export-site-data-d1-sql.mjs", type: "file" },
+  { path: "scripts/prepare-cloudflare-assets.mjs", type: "file" },
   { path: "scripts/autodeploy-prepare.mjs", type: "file" },
   { path: "scripts/autodeploy-deploy.mjs", type: "file" },
 ] as const;

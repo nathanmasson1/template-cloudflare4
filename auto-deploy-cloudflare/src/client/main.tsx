@@ -481,8 +481,8 @@ function TemplatesPage({ templates, onChanged }: { templates: TemplateRecord[]; 
       const detail = err instanceof Error ? err.message : String(err);
       setMessage("");
       setError(
-        detail.includes("scripts/autodeploy-prepare.mjs")
-          ? `${detail} Envie o arquivo scripts/autodeploy-prepare.mjs para o GitHub antes de cadastrar este template.`
+        detail.includes("scripts/")
+          ? `${detail} Envie os scripts de autodeploy para o GitHub antes de cadastrar este template.`
           : detail,
       );
     } finally {
@@ -497,9 +497,9 @@ function TemplatesPage({ templates, onChanged }: { templates: TemplateRecord[]; 
 
   return (
     <section className="panel stack">
-      <Header eyebrow="Templates" title="GitHub públicos" subtitle="Cada template precisa incluir scripts/autodeploy-prepare.mjs." />
+      <Header eyebrow="Templates" title="GitHub públicos" subtitle="Cada template precisa incluir os scripts de autodeploy." />
       <div className="warn">
-        Para usar <strong>nathanmasson1/template-cloudflare4</strong>, confirme que o commit com <code>scripts/autodeploy-prepare.mjs</code> ja foi enviado ao GitHub.
+        Para usar <strong>nathanmasson1/template-cloudflare4</strong>, confirme que o commit com <code>scripts/autodeploy-prepare.mjs</code>, <code>scripts/autodeploy-deploy.mjs</code> e <code>scripts/prepare-cloudflare-assets.mjs</code> ja foi enviado ao GitHub.
       </div>
       <form className="grid" onSubmit={submit}>
         <label>
